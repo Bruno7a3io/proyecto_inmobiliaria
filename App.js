@@ -8,7 +8,9 @@ import logo from './assets/logo_sin_fondo.png';
 
 
 
-export default function App() {
+
+
+const MyScrollableComponent = () => {
   
   //imagen logo
   const logo_img = () => (
@@ -64,65 +66,104 @@ export default function App() {
   });
 
   //carrusel de imagenes
-  const backgrounds = ['#1E3E62', '#0B192C', '#3A6D8C']; // Colores como ejemplo
+  const backgrounds = [ require('./assets/casa1.png'),require('./assets/casa2.png'),require('./assets/casa3.png')]; // Colores como ejemplo
   const screenWidth = Dimensions.get('window').width;
   
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-        {logo_img()}
-        <Text style={styles.headerText}>Inmobiliaria Rimoldi</Text>
-        </View>
+    <ScrollView style={styles.scrollContainer}>
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            {logo_img()}
+            <Text style={styles.headerText}>Inmobiliaria Rimoldi</Text>
+          </View>
         <Animated.View style={{ transform: [{ translateX }] }}>
-        <View style={styles.headerContent}>
-        <Text style={styles.headerText2}>
-        <Text style={styles.precioLabel}>Precio dólar oficial: </Text>  
-        <Text style={styles.preciovalor}>{precioDolar ? `$${precioDolar}` : 'Cargando...'}</Text>
-        </Text>
-        <Text style={styles.headerText2}>
-        <Text style={styles.precioLabel}>fecha: </Text>   
-        <Text style={styles.preciovalor}>{fechaDolar ? `${fechaDolar}` : 'Cargando...'}</Text>
-        </Text>
-        </View>
+          <View style={styles.headerContent}>
+          <Text style={styles.headerText2}>
+            <Text style={styles.precioLabel}>Precio dólar oficial: </Text>  
+            <Text style={styles.preciovalor}>{precioDolar ? `$${precioDolar}` : 'Cargando...'}</Text>
+          </Text>
+          <Text style={styles.headerText2}>
+            <Text style={styles.precioLabel}>fecha: </Text>   
+            <Text style={styles.preciovalor}>{fechaDolar ? `${fechaDolar}` : 'Cargando...'}</Text>
+          </Text>
+          </View>
         </Animated.View>
-    
       {/* Aquí puedes agregar más contenido en el futuro */}
       <StatusBar style="auto" />
       </View>
 
       <View style={{ height: 250, marginTop: 135}}>
-      <ScrollView
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false} // Opcional: Oculta el indicador de desplazamiento
-      >
-        {backgrounds.map((bgColor, index) => (
+        <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false} // Opcional: Oculta el indicador de desplazamiento
+        >
+        {backgrounds.map((imageSource, index) => (
           <View 
             key={index} 
-            style={{ width: screenWidth, height: 300, backgroundColor: bgColor }} 
+            style={{ width: screenWidth, height: 300}} 
+          >
+          <Image 
+            source={imageSource} // Aquí se usa la imagen del arreglo
+            style={{ width: '70%', height: '100%', alignSelf: 'center'  }} // Ajusta el tamaño de la imagen para que cubra el contenedor
+            resizeMode="cover" 
           />
+          </View>
         ))}
-      </ScrollView>
+        </ScrollView>
+      </View>
+      
+      <View>
+        <Image 
+          source={require('./assets/casa1.png')} // Cambia la ruta a tu imagen
+          style={styles.image} 
+        />
+        <Image 
+          source={require('./assets/casa2.png')} // Cambia la ruta a tu imagen
+          style={styles.image} 
+        />
+         <Image 
+          source={require('./assets/casa3.png')} // Cambia la ruta a tu imagen
+          style={styles.image} 
+        />
+        </View>
+     {/* footer */}
+     <View style={styles.footer}>
+        {logo_img()}
+        <Text style={styles.headerText2}>
+          <Text>email:</Text>
+          <Text style={styles.preciovalor}> Rimoldiinmobiliaria@gmail.com </Text>
+        </Text>
+        <Text style={styles.headerText2}>
+          <Text>Telefono:</Text> 
+          <Text style={styles.preciovalor}> 2302 - 735637 </Text>  
+        </Text>
+        <Text style={styles.headerText2}>
+          <Text>Dirección:</Text>
+          <Text style={styles.preciovalor}> calle 15 733 </Text>  
+        </Text>
+     </View>
     </View>
-
-    
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     justifyContent: 'flex-start', 
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f5f5',
   },
   header: {
     width: '100%',
     padding: 2,
-    backgroundColor: '#ff6500',
+    backgroundColor: '#A5B68D',
     alignItems: 'left',
     position: 'absolute',
     top: 0,
@@ -133,7 +174,7 @@ const styles = StyleSheet.create({
   },  
     headerText: {
     fontSize: 25,
-    color: '#EAD8B1',
+    color: '#f5f5f5',
     fontWeight: 'bold',
     marginLeft: 10,
   },
@@ -143,14 +184,32 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 20,
   },
-  precioLabel: {
-    color: '#EAD8B1', // Cambia este color al que prefieras
-  },
   preciovalor: {
-    color: '#1E3E62', // Cambia este color al que prefieras
+    color: '#1E3E62',
   },
   logo: {
     width: 100, 
     height: 100, 
   },
+  footer: {
+    alignItems: 'center',
+    marginTop:150,
+    height: 450,
+    width: '100%',
+    backgroundColor: '#A5B68D',
+  },
+  imagenes: {
+    width: '100%',  // Ocupa el ancho total del carrusel
+    height: '100%', // Ocupa la altura total del carrusel
+    resizeMode: 'cover',  // Ajusta la imagen para cubrir sin deformar
+  },
+    image: {
+        width: Dimensions.get('window').width,
+        height: 300,
+    },
 });
+
+export default MyScrollableComponent;
+
+
+
