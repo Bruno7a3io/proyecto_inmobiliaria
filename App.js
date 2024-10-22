@@ -66,8 +66,10 @@ const MyScrollableComponent = () => {
   });
 
   //carrusel de imagenes
-  const backgrounds = [ require('./assets/casa1.png'),require('./assets/casa2.png'),require('./assets/casa3.png')]; // Colores como ejemplo
+  const backgrounds = [ require('./assets/casa1.png'),require('./assets/casa2.png'),require('./assets/casa3.png')];
   const screenWidth = Dimensions.get('window').width;
+
+  
   
   return (
     <ScrollView style={styles.scrollContainer}>
