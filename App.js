@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Animated, ScrollView,  Dimensions  } from 'react-native';
+import { StyleSheet, Text, View, Image, Animated, ScrollView,  Dimensions,SafeAreaView   } from 'react-native';
 
-
+import ImageCarousel from './componentes/ImageCarousel'; 
+import useDolar from './componentes/dolarapi';
+import AnimacionTexto from './componentes/animaciontexto'; // Asegúrate de tener la ruta correcta
 
 import logo from './assets/logo_sin_fondo.png';
-
-
-
-
+import imgcasa1 from './assets/casa1.png';
+import imgcasa2 from './assets/casa2.png';
+import imgcasa3 from './assets/casa3.png';
 
 const MyScrollableComponent = () => {
   
@@ -16,31 +17,19 @@ const MyScrollableComponent = () => {
   const logo_img = () => (
     <Image source={logo} style={styles.logo} />
   );
-  
-  //para el dolar
-  const [precioDolar, setPrecioDolar] = useState(null);
-  const [fechaDolar, setfechaDolar] = useState(null);
-  const [error, setError] = useState(null);
+  const casa1 = () => (
+    <Image source={imgcasa1} style={styles.image} />
+  );
+  const casa2 = () => (
+    <Image source={imgcasa2} style={styles.image} />
+  );
+  const casa3 = () => (
+    <Image source={imgcasa3} style={styles.image} />
+  );
 
-  useEffect(() => {
-    fetch('https://api.exchangerate-api.com/v4/latest/USD')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('problemas de conexion');
-        }
-        return response.json();
-      })
-      .then(data => {
-        const precio = data.rates.ARS; 
-        setPrecioDolar(precio);
-        const fecha = data.date;
-        setfechaDolar(fecha);
-      })
-      .catch(err => {
-        setError(err.message);
-        console.error('Error al obtener el precio del dólar:', err);
-      });
-  }, []);
+    const { precioDolar, fechaDolar, error } = useDolar(); // Utiliza el hook
+  
+  
 
   //para animacion texto
   const animatedValue = new Animated.Value(0); // Inicializa el valor animado
@@ -68,8 +57,6 @@ const MyScrollableComponent = () => {
   //carrusel de imagenes
   const backgrounds = [ require('./assets/casa1.png'),require('./assets/casa2.png'),require('./assets/casa3.png')];
   const screenWidth = Dimensions.get('window').width;
-
-  
   
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -80,75 +67,73 @@ const MyScrollableComponent = () => {
             {logo_img()}
             <Text style={styles.headerText}>Inmobiliaria Rimoldi</Text>
           </View>
-        <Animated.View style={{ transform: [{ translateX }] }}>
-          <View style={styles.headerContent}>
-          <Text style={styles.headerText2}>
+          <View>
+          <AnimacionTexto children={  
+            <View style={styles.headerContent}>
+            <Text style={styles.headerText2}>
             <Text style={styles.precioLabel}>Precio dólar oficial: </Text>  
             <Text style={styles.preciovalor}>{precioDolar ? `$${precioDolar}` : 'Cargando...'}</Text>
-          </Text>
-          <Text style={styles.headerText2}>
+            </Text>
+            <Text style={styles.headerText2}>
             <Text style={styles.precioLabel}>fecha: </Text>   
             <Text style={styles.preciovalor}>{fechaDolar ? `${fechaDolar}` : 'Cargando...'}</Text>
-          </Text>
+            </Text>
+            </View> 
+          } />
           </View>
-        </Animated.View>
-      {/* Aquí puedes agregar más contenido en el futuro */}
-      <StatusBar style="auto" />
-      </View>
-
-      <View style={{ height: 250, marginTop: 135}}>
-        <ScrollView
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false} // Opcional: Oculta el indicador de desplazamiento
-        >
-        {backgrounds.map((imageSource, index) => (
-          <View 
-            key={index} 
-            style={{ width: screenWidth, height: 300}} 
-          >
-          <Image 
-            source={imageSource} // Aquí se usa la imagen del arreglo
-            style={{ width: '70%', height: '100%', alignSelf: 'center'  }} // Ajusta el tamaño de la imagen para que cubra el contenedor
-            resizeMode="cover" 
-          />
-          </View>
-        ))}
-        </ScrollView>
-      </View>
-      
-      <View>
-        <Image 
-          source={require('./assets/casa1.png')} // Cambia la ruta a tu imagen
-          style={styles.image} 
-        />
-        <Image 
-          source={require('./assets/casa2.png')} // Cambia la ruta a tu imagen
-          style={styles.image} 
-        />
-         <Image 
-          source={require('./assets/casa3.png')} // Cambia la ruta a tu imagen
-          style={styles.image} 
-        />
+          {/* Aquí puedes agregar más contenido en el futuro */}
+          <StatusBar style="auto" />
         </View>
-     {/* footer */}
-     <View style={styles.footer}>
-        {logo_img()}
-        <Text style={styles.headerText2}>
+        {/* contenido */}
+        <View  style={styles.contenido}>    
+          <View>
+            <SafeAreaView>
+            <ImageCarousel backgrounds={backgrounds} />
+            </SafeAreaView>
+          </View>
+    
+          <View>
+            <View
+            style={{
+            height: '10%',
+            backgroundColor: 'powderblue',
+            }}
+            />
+            <View
+            style={{
+            height: '10%',
+            backgroundColor: 'red',
+            }}
+            />
+            <View
+            style={{
+            height: '10%',
+            backgroundColor: 'green',
+            }}
+            />
+            {casa1()}
+            {casa2()}
+            {casa3()}
+          </View>
+        </View>
+        {/* footer */}
+        <View style={styles.footer}>
+          {logo_img()}
+          <Text style={styles.headerText2}>
           <Text>email:</Text>
           <Text style={styles.preciovalor}> Rimoldiinmobiliaria@gmail.com </Text>
-        </Text>
-        <Text style={styles.headerText2}>
+          </Text>
+          <Text style={styles.headerText2}>
           <Text>Telefono:</Text> 
           <Text style={styles.preciovalor}> 2302 - 735637 </Text>  
-        </Text>
-        <Text style={styles.headerText2}>
+          </Text>
+          <Text style={styles.headerText2}>
           <Text>Dirección:</Text>
           <Text style={styles.preciovalor}> calle 15 733 </Text>  
-        </Text>
-     </View>
+          </Text>
+        </View>
     </View>
-    </ScrollView>
+  </ScrollView>
   );
 }
 
@@ -163,6 +148,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
+    flex: 1,
     width: '100%',
     padding: 2,
     backgroundColor: '#A5B68D',
@@ -193,10 +179,13 @@ const styles = StyleSheet.create({
     width: 100, 
     height: 100, 
   },
+  contenido:{
+    flex: 3,
+  },
   footer: {
     alignItems: 'center',
     marginTop:150,
-    height: 450,
+    flex: 2,
     width: '100%',
     backgroundColor: '#A5B68D',
   },
@@ -210,6 +199,7 @@ const styles = StyleSheet.create({
         height: 300,
     },
 });
+
 
 export default MyScrollableComponent;
 
