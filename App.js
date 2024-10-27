@@ -92,29 +92,22 @@ const MyScrollableComponent = () => {
             </SafeAreaView>
           </View>
     
-          <View>
-            <View
-            style={{
-            height: '10%',
-            backgroundColor: 'powderblue',
-            }}
-            />
-            <View
-            style={{
-            height: '10%',
-            backgroundColor: 'red',
-            }}
-            />
-            <View
-            style={{
-            height: '10%',
-            backgroundColor: 'green',
-            }}
-            />
-            {casa1()}
-            {casa2()}
-            {casa3()}
+          <View   style={styles.tarjeta}>
+              {casa1()}
+          <View   style={styles.descripcion}>   
+              <Text style={{ marginLeft: 30 }}>Disponible</Text>
+              <Text style={{ marginLeft: 40, fontSize: 25 }}>$2540345</Text>
+              <Text style={{ marginLeft: 55 }}> categoria: departamento </Text>
+              <Text style={{ marginLeft: 55 }}> fecha de alta: 27/10/24 </Text>
+              <Text style={{ marginLeft: 55 }}> Dirección: calle 15 414N </Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 40, marginRight: 40, paddingBottom: 10 }}>
+                <Text>me gusta</Text>
+                <Text>consultar</Text>
+              </View>
           </View>
+          </View>
+
+          
         </View>
         {/* footer */}
         <View style={styles.footer}>
@@ -189,15 +182,26 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#A5B68D',
   },
-  imagenes: {
-    width: '100%',  // Ocupa el ancho total del carrusel
-    height: '100%', // Ocupa la altura total del carrusel
-    resizeMode: 'cover',  // Ajusta la imagen para cubrir sin deformar
+  tarjeta: {
+    marginTop: 20,
+    backgroundColor: '#FAF7F0',
+    width: Dimensions.get('window').width - 60,
+    marginHorizontal: 30,
+    borderRadius: 20,
+    elevation: 8,
+    
   },
-    image: {
-        width: Dimensions.get('window').width,
-        height: 300,
-    },
+  descripcion: {
+    backgroundColor: '#FAF7F0',
+    borderRadius: 20,
+    
+  },
+  image: {
+    width: Dimensions.get('window').width - 60,
+    height: 300,
+    borderRadius: 20,
+   
+  },
 });
 
 
