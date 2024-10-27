@@ -48,7 +48,7 @@ const ImageCarousel = ({ backgrounds }) => {
           <View key={index} style={{ width: screenWidth, height: 300 }}>
             <Image 
               source={imageSource} 
-              style={{ width: '70%', height: '100%', alignSelf: 'center' }} 
+              style={{ width: '70%', height: '100%', alignSelf: 'center', borderRadius: 20}} 
               resizeMode="cover" 
             />
           </View>
