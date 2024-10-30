@@ -49,10 +49,10 @@ const MyScrollableComponent = ( {navigation} ) => {
   const backgrounds = [imgcasa1, imgcasa2, imgcasa3];
   const screenWidth = Dimensions.get('window').width;
 
-  const handleConsult = () => {
+  const handleConsult = (item) => {
        // Verifica que navigation esté definido antes de usarlo
        if (navigation) {
-        navigation.navigate('Consult'); // Navegar a la pantalla de consulta
+        navigation.navigate('PropertyDetail', { property: item }); 
       } else {
         console.warn("Navigation prop is undefined");
       }
@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
   },
   contenido: {
     flex: 3,
+    padding: 50,
   },
   footer: {
     alignItems: 'center',

@@ -1,16 +1,26 @@
 // PropertyCard.js
-import React from 'react';
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import CustomButton from './CustomButton'; // Asegúrate de que la ruta sea correcta
 import StarRating from './StarRating'; // Asegúrate de que la ruta sea correcta
+import Modal from 'react-native-modal';
+import Icon from 'react-native-vector-icons/Ionicons'; // Importa el ícono de Ionicons
 
 const PropertyCard = ({ price, category, date, address, imageComponent, onConsult }) => {
   const screenWidth = Dimensions.get('window').width;
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   return (
     <View style={styles.tarjeta}>
       {/* Renderiza el componente de imagen que pasas como prop */}
-      <Image source={imageComponent} style={styles.image} />
+      {/* Imagen que al tocar se agranda */}
+        <TouchableOpacity onPress={toggleModal}>
+          <Image source={imageComponent} style={styles.image} />
+        </TouchableOpacity>
       <View style={styles.descripcion}>
         <Text style={{ marginLeft: 30 }}>Disponible</Text>
         <Text style={{ marginLeft: 40, fontSize: 25 }}>${price}</Text>
@@ -22,13 +32,24 @@ const PropertyCard = ({ price, category, date, address, imageComponent, onConsul
             <Text>Calificar propiedad</Text>
             <StarRating />
           </View>
-          <CustomButton title="Consultar" onPress={onConsult} />
+          <CustomButton title="Ver mas" onPress={onConsult} />
         </View>
       </View>
+      {/* Modal para la imagen a pantalla completa */}
+      <Modal isVisible={isModalVisible} onBackdropPress={toggleModal} style={styles.modal}>
+        <View style={styles.modalContent}>
+          {/* Ícono de cierre */}
+          <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
+            <Icon name="close" size={30} color="#FFF" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={toggleModal}>
+            <Image source={imageComponent} style={styles.fullImage} />
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   tarjeta: {
     marginTop: 20,
@@ -37,7 +58,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     borderRadius: 20,
     elevation: 8,
-    alignItems: 'center',  // Centra los elementos horizontalmente
+    alignItems: 'center', // Centra los elementos horizontalmente
   },
   descripcion: {
     backgroundColor: '#FAF7F0',
@@ -48,9 +69,29 @@ const styles = StyleSheet.create({
     height: 300,
     borderRadius: 20,
   },
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: Dimensions.get('window').width - 30,
+    height: 230,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Fondo semitransparente
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 1, // Asegura que esté por encima de otros elementos
+  },
+  fullImage: {
+    width: Dimensions.get('window').width - 30,
+    height: 800,
+    borderRadius: 20,
+    resizeMode: 'contain', // Mantiene la relación de aspecto
+  },
 });
 
-
-
-
-export default PropertyCard;
+export default PropertyCard; // Asegúrate de que este export esté presente

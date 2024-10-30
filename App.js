@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MyScrollableComponent from './componentes/MyScrollableComponent'; // Asegúrate de que la ruta sea correcta
 import ConsultScreen from '../inmobiliaria/ConsultScreen'; // Asegúrate de que la ruta sea correcta
 import TestNavigation from './componentes/TestNavigation'; // Asegúrate de que la ruta sea correcta
+import PropertyDetail from './componentes/PropertyDetail'; // Asegúrate de que la ruta sea correcta
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,7 @@ const App = () => {
       <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={MyScrollableComponent} />
         <Stack.Screen name="Consult" component={ConsultScreen} />
+        <Stack.Screen name="PropertyDetail" component={PropertyDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );
