@@ -1,7 +1,7 @@
 // componentes/MyScrollableComponent.js
-import React, { useEffect } from 'react';
+import React, {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Animated, ScrollView, Dimensions, SafeAreaView, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, Animated, ScrollView, Dimensions, SafeAreaView, Alert, ActivityIndicator, FlatList  } from 'react-native';
 
 import ImageCarousel from './ImageCarousel'; 
 import useDolar from './dolarapi';
@@ -10,13 +10,14 @@ import StarRating from './StarRating';
 import CustomButton from './CustomButton'; 
 import PropertyCard from './PropertyCard'; 
 
+import { getData, getObj, storeData, storeObj } from './service/data';
+
 import logo from '../assets/logo_sin_fondo.png';
 import imgcasa1 from '../assets/casa1.png';
 import imgcasa2 from '../assets/casa2.png';
 import imgcasa3 from '../assets/casa3.png';
 
 const MyScrollableComponent = ( {navigation} ) => {
-    console.log('Navigation prop:', navigation); // Agregar esta línea para verificar el objeto navigation
   //imagen logo
   const logo_img = () => (
     <Image source={logo} style={styles.logo} />
@@ -57,6 +58,41 @@ const MyScrollableComponent = ( {navigation} ) => {
       }
   };
 
+  //para db
+   const [mykey, setmykey] = useState(null);
+  const [mykeyobj, setmykeyobj] = useState(null);
+  const [isLoading, setLoading] = useState(true);
+  const [propiedad, setpropiedad] = useState([]);
+
+  const getDatos = async () => {
+    const vkey = await getData('@MOVIL2_mykey');
+    const vkeyobj = await getObj('@MOVIL2_mykeyobj');
+
+    if (vkey !== null) {
+      setmykey(vkey);
+    }
+    if (vkeyobj !== null) {
+      setmykeyobj(vkeyobj);
+    }
+  };
+
+  const getpropiedad = async () => {
+    try {
+      const response = await fetch('http://192.168.1.69/api/propiedad.php');
+      const json = await response.json();
+      setpropiedad(json); // Asumiendo que json es un array de personas
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getDatos();
+    getpropiedad();
+  }, []);
+
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
@@ -83,6 +119,9 @@ const MyScrollableComponent = ( {navigation} ) => {
           <StatusBar style="auto" />
         </View>
 
+        
+        
+
         {/* contenido */}
         <View style={styles.contenido}>
           <View>
@@ -90,44 +129,22 @@ const MyScrollableComponent = ( {navigation} ) => {
               <ImageCarousel backgrounds={backgrounds} />
             </SafeAreaView>
           </View>
-
-          <View style={styles.tarjeta}>
-            <Image source={imgcasa1} style={styles.image} />
-            <View style={styles.descripcion}>
-              <Text style={{ marginLeft: 30 }}>Disponible</Text>
-              <Text style={{ marginLeft: 40, fontSize: 25 }}>$2540345</Text>
-              <Text style={{ marginLeft: 55 }}> categoría: departamento </Text>
-              <Text style={{ marginLeft: 55 }}> fecha de alta: 27/10/24 </Text>
-              <Text style={{ marginLeft: 55 }}> Dirección: calle 15 414N </Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 40, marginRight: 40, paddingBottom: 10 }}>
-                <View>
-                  <Text>calificar propiedad</Text>
-                  <StarRating />
-                </View>
-                <CustomButton title="Consultar" onPress={handleConsult} />
-              </View>
-            </View>
-          </View>
-
-          <View>
-            <PropertyCard 
-              price={2540345} 
-              category="departamento" 
-              date="27/10/24" 
-              address="calle 15 414N" 
-              imageComponent={require('../assets/casa3.png')} 
-              onConsult={handleConsult} 
-            />
-            <PropertyCard 
-              price={2540345} 
-              category="departamento" 
-              date="27/10/24" 
-              address="calle 15 414N" 
-              imageComponent={require('../assets/casa3.png')} 
-              onConsult={handleConsult} 
-            />
-            {/* Agrega más PropertyCard si es necesario */}
-          </View>
+          
+          {isLoading ? (
+          <ActivityIndicator />
+          ) : (
+          propiedad.map((item) => (
+          <PropertyCard
+            key={item.idPropiedad}
+            price={item.precio_alquiler_minimo || 0}
+            category={item.categoria || "Desconocido"}
+            date={item.fecha_alta || "Fecha desconocida"}
+            address={item.direccion || "Dirección desconocida"}
+            imageComponent={require('../assets/casa1.png')}
+            onConsult={() => handleConsult(item)}
+          />
+        ))
+      )}
         </View>
 
         {/* footer */}
