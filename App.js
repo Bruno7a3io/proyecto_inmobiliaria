@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Animated, ScrollView,  Dimensions,SafeAreaView   } from 'react-native';
+import { StyleSheet, Text, View, Image, Animated, ScrollView,  Dimensions,SafeAreaView, Alert   } from 'react-native';
+
+
+
 
 import ImageCarousel from './componentes/ImageCarousel'; 
 import useDolar from './componentes/dolarapi';
-import AnimacionTexto from './componentes/animaciontexto'; // Asegúrate de tener la ruta correcta
+import AnimacionTexto from './componentes/animaciontexto'; 
+import StarRating from './componentes/StarRating';
+import CustomButton from './componentes/CustomButton'; // Asegúrate de que la ruta sea correcta
+import PropertyCard from './componentes/PropertyCard'; // Asegúrate de que la ruta sea correcta
+
 
 import logo from './assets/logo_sin_fondo.png';
 import imgcasa1 from './assets/casa1.png';
 import imgcasa2 from './assets/casa2.png';
 import imgcasa3 from './assets/casa3.png';
+
+
 
 const MyScrollableComponent = () => {
   
@@ -57,6 +66,11 @@ const MyScrollableComponent = () => {
   //carrusel de imagenes
   const backgrounds = [ require('./assets/casa1.png'),require('./assets/casa2.png'),require('./assets/casa3.png')];
   const screenWidth = Dimensions.get('window').width;
+
+  //boton
+  const handleConsult = () => {
+    Alert.alert("¡Consulta realizada!");
+  };
   
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -101,11 +115,30 @@ const MyScrollableComponent = () => {
               <Text style={{ marginLeft: 55 }}> fecha de alta: 27/10/24 </Text>
               <Text style={{ marginLeft: 55 }}> Dirección: calle 15 414N </Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 40, marginRight: 40, paddingBottom: 10 }}>
-                <Text>me gusta</Text>
-                <Text>consultar</Text>
+              <View>
+                <Text>calificar propiedad</Text>
+                <StarRating />
+                {/* Asegúrate de que cualquier texto adicional esté dentro de <Text> */}          
+                </View>
+                <CustomButton title="Consultar" onPress={handleConsult} />
               </View>
           </View>
           </View>
+          
+          <View>
+
+          <PropertyCard 
+        price={2540345} 
+        category="departamento" 
+        date="27/10/24" 
+        address="calle 15 414N" 
+        imageComponent={require('./assets/casa3.png')} 
+        onConsult={handleConsult} 
+      />
+      {/* Aquí puedes agregar más PropertyCard si es necesario */}
+    </View>
+
+         
 
           
         </View>
