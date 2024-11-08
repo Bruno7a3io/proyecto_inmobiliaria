@@ -1,7 +1,10 @@
 // componentes/PropertyDetail.js
 import React, {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, Image, ScrollView, Animated,Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Image, ScrollView, Animated,Dimensions, TouchableOpacity } from 'react-native';
+import Modal from 'react-native-modal';
+import Icon from 'react-native-vector-icons/Ionicons'; // Importa el ícono de Ionicons
+
 
 import logo from '../assets/logo_sin_fondo.png';
 import useDolar from './dolarapi';
@@ -75,6 +78,20 @@ const PropertyDetail = ({ route }) => {
      getpropiedad();
    }, []);
  
+  //para galeria
+  // Convierte la cadena de URLs de galería en un array si es necesario
+  const galeriaArray = Array.isArray(property.galeria) ? property.galeria : property.galeria?.split(',');
+
+  const screenWidth = Dimensions.get('window').width;
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const openModal = (imageUrl) => { 
+    setSelectedImage(imageUrl); setModalVisible(true); }; 
+  
+  const closeModal = () => { 
+    setModalVisible(false); setSelectedImage(null); };
+  
 
     return (
     <ScrollView style={styles.scrollContainer}>
@@ -104,7 +121,7 @@ const PropertyDetail = ({ route }) => {
 
       <View style={styles.contenido}>
         <View>
-        <Image source={require('../assets/casa1.png')} style={styles.image} />
+        <Image source={{ uri: property.imgprincipal || 'imagen principal' }} style={styles.image} />
           <Text style={styles.title}>{property.nombre || 'Nombre de la propiedad'}</Text>
           <Text style={styles.price}>Precio: ${property.precio_alquiler_minimo || 0}</Text>
           <Text style={styles.category}>Categoría: {property.categoria || 'Desconocido'}</Text>
@@ -118,6 +135,51 @@ const PropertyDetail = ({ route }) => {
           <Text style={styles.address}>Fecha actualizacion precio: {property.fecha_precio_minimo || 'Desconocido'}</Text>
           <Text style={styles.address}>Disponible: {property.disponible || 'Desconocido'}</Text>
           <Text style={styles.address}>Descripción: {property.descripcion || 'Desconocido'}</Text>
+            
+
+          <View style={styles.containergaleria}>
+  <Text>Imágenes:</Text>
+  <View style={styles.imageContainer}>
+    {galeriaArray.length > 0 ? (
+      galeriaArray.map((img, index) => {
+        const imageUrl = img.trim();
+        return imageUrl ? (
+          <TouchableOpacity key={index} onPress={() => openModal(imageUrl)}>
+            <Image
+              source={{ uri: imageUrl }}
+              style={styles.imagegaleria}
+            />
+          </TouchableOpacity>
+        ) : null;
+      })
+    ) : (
+      <Text>No hay imágenes disponibles</Text>
+    )}
+  </View>
+
+  {selectedImage && (
+    <Modal
+      visible={isModalVisible}
+      onRequestClose={closeModal}
+      transparent={true}
+      animationType="slide"
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+            <Icon name="close" size={30} color="#FFF" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={closeModal}>
+            <Image source={{ uri: selectedImage }} style={styles.image} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  )}
+</View>
+
+
+
         </View>
         </View>
 
@@ -230,6 +292,25 @@ address: {
 fontSize: 16,
 marginBottom: 5,
 },
+containergaleria: {
+  flex: 1,
+},
+imageContainer: {
+  flexDirection: 'row',       // Acomoda las imágenes en fila
+  flexWrap: 'wrap',           // Permite que las imágenes se acomoden en filas cuando se termine el espacio
+  justifyContent: 'flex-start',  // Alinea las imágenes al principio
+  gap: 10,                    // Espacio entre las imágenes
+},
+imagegaleria: {
+  width: 150,                 // Ajusta el tamaño de las imágenes (puedes cambiar este valor)
+  height: 150,                // Ajusta la altura
+  marginBottom: 10,           // Espacio debajo de cada imagen
+},
+closeButton: { 
+  position: 'absolute', 
+  top: 10, 
+  right: 25, 
+  zIndex: 1, },
 });
 
 export default PropertyDetail;

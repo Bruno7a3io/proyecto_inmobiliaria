@@ -1,4 +1,5 @@
 // componentes/MyScrollableComponent.js
+//http://localhost/10_10_inmobiliaria/inmobiliaria/assets/casa1.png
 import React, {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Animated, ScrollView, Dimensions, SafeAreaView, Alert, ActivityIndicator, FlatList  } from 'react-native';
@@ -140,7 +141,7 @@ const MyScrollableComponent = ( {navigation} ) => {
             category={item.categoria || "Desconocido"}
             date={item.fecha_alta || "Fecha desconocida"}
             address={item.direccion || "Dirección desconocida"}
-            imageComponent={require('../assets/casa1.png')}
+            imageComponent={item.imgprincipal || "Imagen Principal"}
             onConsult={() => handleConsult(item)}
           />
         ))

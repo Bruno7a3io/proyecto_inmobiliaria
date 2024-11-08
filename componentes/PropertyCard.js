@@ -19,7 +19,7 @@ const PropertyCard = ({ price, category, date, address, imageComponent, onConsul
       {/* Renderiza el componente de imagen que pasas como prop */}
       {/* Imagen que al tocar se agranda */}
         <TouchableOpacity onPress={toggleModal}>
-          <Image source={imageComponent} style={styles.image} />
+        <Image source={{ uri: `${imageComponent}` }} style={styles.image} />
         </TouchableOpacity>
       <View style={styles.descripcion}>
         <Text style={{ marginLeft: 30 }}>Disponible</Text>
@@ -43,7 +43,7 @@ const PropertyCard = ({ price, category, date, address, imageComponent, onConsul
             <Icon name="close" size={30} color="#FFF" />
           </TouchableOpacity>
           <TouchableOpacity onPress={toggleModal}>
-            <Image source={imageComponent} style={styles.fullImage} />
+          <Image source={{ uri: `${imageComponent}` }} style={styles.image} />
           </TouchableOpacity>
         </View>
       </Modal>
