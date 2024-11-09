@@ -2,7 +2,7 @@
 //http://localhost/10_10_inmobiliaria/inmobiliaria/assets/casa1.png
 import React, {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Animated, ScrollView, Dimensions, SafeAreaView, Alert, ActivityIndicator, FlatList  } from 'react-native';
+import { StyleSheet, Text, View, Image, Animated, ScrollView, Dimensions, SafeAreaView, Alert, ActivityIndicator, FlatList, Button  } from 'react-native';
 
 import ImageCarousel from './ImageCarousel'; 
 import useDolar from './dolarapi';
@@ -64,6 +64,7 @@ const MyScrollableComponent = ( {navigation} ) => {
   const [mykeyobj, setmykeyobj] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [propiedad, setpropiedad] = useState([]);
+  const [categoria, setCategoria] = useState(''); // Inicializa como un string vacío
 
   const getDatos = async () => {
     const vkey = await getData('@MOVIL2_mykey');
@@ -77,22 +78,40 @@ const MyScrollableComponent = ( {navigation} ) => {
     }
   };
 
-  const getpropiedad = async () => {
-    try {
-      const response = await fetch('http://192.168.1.69/api/propiedad.php');
-      const json = await response.json();
-      setpropiedad(json); // Asumiendo que json es un array de personas
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+   const getPropiedades = async () => {
+  try {
+    const url = categoria 
+      ? `http://192.168.1.69/api/propiedad.php?categoria=${categoria}` 
+      : `http://192.168.1.69/api/propiedad.php`;
+    
+    const response = await fetch(url);
+    const json = await response.json();
+    
+    // Asegura que json sea un array antes de asignarlo a propiedad
+    if (Array.isArray(json)) {
+      setpropiedad(json);
+    } else {
+      console.error("Error: La respuesta no es un array", json);
+      setpropiedad([]); // Setea propiedad como array vacío en caso de error
     }
-  };
+  } catch (error) {
+    console.error(error);
+    setpropiedad([]);
+  } finally {
+    setLoading(false);
+  }
+};
+  
+    // Efecto para cargar datos locales e inicializar propiedades al montar el componente
+    useEffect(() => {
+      setLoading(true);
+      getDatos();
+      getPropiedades();
+    }, [categoria]);
 
-  useEffect(() => {
-    getDatos();
-    getpropiedad();
-  }, []);
+    const handleCategoriaChange = (newCategoria) => {
+      setCategoria(newCategoria);
+    };
 
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -130,7 +149,16 @@ const MyScrollableComponent = ( {navigation} ) => {
               <ImageCarousel backgrounds={backgrounds} />
             </SafeAreaView>
           </View>
-          
+          <View>
+          <View>
+            <Text>Filtrar por categoría:</Text>
+            <Button title="Ver todos" onPress={() => handleCategoriaChange('')} />
+            <Button title="Ver departamentos" onPress={() => handleCategoriaChange('departamento')} />
+            <Button title="Ver casas" onPress={() => handleCategoriaChange('casa')} />
+            <Button title="Ver campos" onPress={() => handleCategoriaChange('campo')} />
+            <Button title="Ver oficinas" onPress={() => handleCategoriaChange('oficina')} />
+          </View>
+         
           {isLoading ? (
           <ActivityIndicator />
           ) : (
@@ -147,7 +175,7 @@ const MyScrollableComponent = ( {navigation} ) => {
         ))
       )}
         </View>
-
+        </View>
         {/* footer */}
         <View style={styles.footer}>
           {logo_img()}

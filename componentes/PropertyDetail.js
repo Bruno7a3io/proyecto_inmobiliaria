@@ -80,7 +80,9 @@ const PropertyDetail = ({ route }) => {
  
   //para galeria
   // Convierte la cadena de URLs de galería en un array si es necesario
-  const galeriaArray = Array.isArray(property.galeria) ? property.galeria : property.galeria?.split(',');
+  const galeriaArray = Array.isArray(property.galeria)
+  ? property.galeria
+  : (property.galeria ? property.galeria.split(',') : []);
 
   const screenWidth = Dimensions.get('window').width;
   const [isModalVisible, setModalVisible] = useState(false);
