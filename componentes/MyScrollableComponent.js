@@ -2,7 +2,7 @@
 //http://localhost/10_10_inmobiliaria/inmobiliaria/assets/casa1.png
 import React, {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Animated, ScrollView, Dimensions, SafeAreaView, Alert, ActivityIndicator, FlatList, Button  } from 'react-native';
+import { StyleSheet, Text, View, Image, Animated, ScrollView, Dimensions, SafeAreaView, Alert, ActivityIndicator, FlatList, Button, TouchableOpacity   } from 'react-native';
 
 import ImageCarousel from './ImageCarousel'; 
 import useDolar from './dolarapi';
@@ -11,12 +11,13 @@ import StarRating from './StarRating';
 import CustomButton from './CustomButton'; 
 import PropertyCard from './PropertyCard'; 
 
+
 import { getData, getObj, storeData, storeObj } from './service/data';
 
 import logo from '../assets/logo_sin_fondo.png';
-import imgcasa1 from '../assets/casa1.png';
-import imgcasa2 from '../assets/casa2.png';
-import imgcasa3 from '../assets/casa3.png';
+import imgcasa1 from '../assets/carrusel1.jpg';
+import imgcasa2 from '../assets/carrusel2.jpg';
+import imgcasa3 from '../assets/carrusel3.jpg';
 
 const MyScrollableComponent = ( {navigation} ) => {
   //imagen logo
@@ -65,6 +66,7 @@ const MyScrollableComponent = ( {navigation} ) => {
   const [isLoading, setLoading] = useState(true);
   const [propiedad, setpropiedad] = useState([]);
   const [categoria, setCategoria] = useState(''); // Inicializa como un string vacío
+  const [finalidadSeleccionada, setFinalidadSeleccionada] = useState('');
 
   const getDatos = async () => {
     const vkey = await getData('@MOVIL2_mykey');
@@ -81,7 +83,7 @@ const MyScrollableComponent = ( {navigation} ) => {
    const getPropiedades = async () => {
   try {
     const url = categoria 
-      ? `http://192.168.1.69/api/propiedad.php?categoria=${categoria}` 
+      ? `http://192.168.1.69/api/propiedad.php?categoria=${categoria}&finalidad=${finalidadSeleccionada}`
       : `http://192.168.1.69/api/propiedad.php`;
     
     const response = await fetch(url);
@@ -107,11 +109,23 @@ const MyScrollableComponent = ( {navigation} ) => {
       setLoading(true);
       getDatos();
       getPropiedades();
-    }, [categoria]);
+    }, [categoria, finalidadSeleccionada]); // Dependencias del efecto
 
     const handleCategoriaChange = (newCategoria) => {
       setCategoria(newCategoria);
     };
+
+    const handleFinalidadChange = (finalidad) => {
+      setFinalidadSeleccionada(finalidad);
+    };
+
+      // Estilos para los botones seleccionados
+  const getButtonStyle = (isSelected) => ({
+    backgroundColor: isSelected ? '#4CAF50' : '#f0f0f0', // Color verde cuando seleccionado, gris cuando no
+    padding: 10,
+    margin: 5,
+    borderRadius: 5,
+  });
 
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -150,14 +164,69 @@ const MyScrollableComponent = ( {navigation} ) => {
             </SafeAreaView>
           </View>
           <View>
-          <View>
-            <Text>Filtrar por categoría:</Text>
-            <Button title="Ver todos" onPress={() => handleCategoriaChange('')} />
-            <Button title="Ver departamentos" onPress={() => handleCategoriaChange('departamento')} />
-            <Button title="Ver casas" onPress={() => handleCategoriaChange('casa')} />
-            <Button title="Ver campos" onPress={() => handleCategoriaChange('campo')} />
-            <Button title="Ver oficinas" onPress={() => handleCategoriaChange('oficina')} />
-          </View>
+          <View style={{ padding: 20 }}>
+  {/* Fila 1: Texto título de categoría */}
+  <Text>Filtrar por categoría:</Text>
+
+  {/* Fila 2: Categorías con desplazamiento horizontal */}
+  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+    <TouchableOpacity
+      style={getButtonStyle(categoria === '')}
+      onPress={() => handleCategoriaChange('')}
+    >
+      <Text style={{ color: categoria === '' ? '#fff' : '#000' }}>Ver todos</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={getButtonStyle(categoria === 'departamento')}
+      onPress={() => handleCategoriaChange('departamento')}
+    >
+      <Text style={{ color: categoria === 'departamento' ? '#fff' : '#000' }}>Ver departamentos</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={getButtonStyle(categoria === 'casa')}
+      onPress={() => handleCategoriaChange('casa')}
+    >
+      <Text style={{ color: categoria === 'casa' ? '#fff' : '#000' }}>Ver casas</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={getButtonStyle(categoria === 'campo')}
+      onPress={() => handleCategoriaChange('campo')}
+    >
+      <Text style={{ color: categoria === 'campo' ? '#fff' : '#000' }}>Ver campos</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={getButtonStyle(categoria === 'oficina')}
+      onPress={() => handleCategoriaChange('oficina')}
+    >
+      <Text style={{ color: categoria === 'oficina' ? '#fff' : '#000' }}>Ver oficinas</Text>
+    </TouchableOpacity>
+  </ScrollView>
+
+  {/* Fila 3: Texto título de finalidad */}
+  <Text>Filtrar por finalidad:</Text>
+
+  {/* Fila 4: Finalidades con desplazamiento horizontal */}
+  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+  <TouchableOpacity
+      style={getButtonStyle(finalidadSeleccionada === '')}
+      onPress={() => handleFinalidadChange('')}
+    >
+      <Text style={{ color: finalidadSeleccionada === '' ? '#fff' : '#000' }}>Todos</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={getButtonStyle(finalidadSeleccionada === '0')}
+      onPress={() => handleFinalidadChange('0')}
+    >
+      <Text style={{ color: finalidadSeleccionada === '0' ? '#fff' : '#000' }}>Alquilar</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={getButtonStyle(finalidadSeleccionada === '1')}
+      onPress={() => handleFinalidadChange('1')}
+    >
+      <Text style={{ color: finalidadSeleccionada === '1' ? '#fff' : '#000' }}>Comprar</Text>
+    </TouchableOpacity>
+  </ScrollView>
+    </View>
          
           {isLoading ? (
           <ActivityIndicator />
@@ -170,6 +239,7 @@ const MyScrollableComponent = ( {navigation} ) => {
             date={item.fecha_alta || "Fecha desconocida"}
             address={item.direccion || "Dirección desconocida"}
             imageComponent={item.imgprincipal || "Imagen Principal"}
+            status={ Number(item.finalidad) || 0} 
             onConsult={() => handleConsult(item)}
           />
         ))
@@ -211,7 +281,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     padding: 2,
-    backgroundColor: '#A5B68D',
+    backgroundColor: '#697565',
     alignItems: 'left',
     position: 'absolute',
     top: 0,
@@ -245,10 +315,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     alignItems: 'center',
-    marginTop: 150,
     flex: 2,
     width: '100%',
-    backgroundColor: '#A5B68D',
+    backgroundColor: '#697565',
   },
   tarjeta: {
     marginTop: 20,
@@ -266,6 +335,19 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 60,
     height: 300,
     borderRadius: 20,
+  },
+  containerfiltro: {
+    flexDirection: 'row',  // Divide el espacio en dos partes horizontales
+    justifyContent: 'space-between', // Espacio entre las dos secciones
+    padding: 20,
+  },
+  leftContainer: {
+    flex: 1, // Toma la mitad del espacio disponible
+    paddingRight: 10, // Añadimos un pequeño margen para separar las secciones
+  },
+  rightContainer: {
+    flex: 1, // Toma la otra mitad del espacio disponible
+    paddingLeft: 10, // Añadimos un pequeño margen para separar las secciones
   },
 });
 

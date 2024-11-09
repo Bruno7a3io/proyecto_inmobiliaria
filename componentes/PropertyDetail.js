@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     padding: 2,
-    backgroundColor: '#A5B68D',
+    backgroundColor: '#697565',
     alignItems: 'left',
     position: 'absolute',
     top: 0,
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     flex: 2,
     width: '100%',
-    backgroundColor: '#A5B68D',
+    backgroundColor: '#697565',
   },
   container: {
     flex: 1,

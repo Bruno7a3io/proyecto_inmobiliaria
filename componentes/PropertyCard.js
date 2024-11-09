@@ -6,7 +6,7 @@ import StarRating from './StarRating'; // Asegúrate de que la ruta sea correcta
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Ionicons'; // Importa el ícono de Ionicons
 
-const PropertyCard = ({ price, category, date, address, imageComponent, onConsult }) => {
+const PropertyCard = ({ price, category, date, address, imageComponent, onConsult, status }) => {
   const screenWidth = Dimensions.get('window').width;
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -14,8 +14,11 @@ const PropertyCard = ({ price, category, date, address, imageComponent, onConsul
     setModalVisible(!isModalVisible);
   };
 
+    // Define un estilo dinámico para el borde
+    const cardBorderStyle = status === 1 ? styles.redBorder : styles.blueBorder;
+
   return (
-    <View style={styles.tarjeta}>
+    <View style={[styles.tarjeta, cardBorderStyle]}>
       {/* Renderiza el componente de imagen que pasas como prop */}
       {/* Imagen que al tocar se agranda */}
         <TouchableOpacity onPress={toggleModal}>
@@ -91,6 +94,14 @@ const styles = StyleSheet.create({
     height: 800,
     borderRadius: 20,
     resizeMode: 'contain', // Mantiene la relación de aspecto
+  },
+  redBorder: {
+    borderColor: '#C96868',
+    borderWidth: 4,
+  },
+  blueBorder: {
+    borderColor: '#7EACB5',
+    borderWidth: 4,
   },
 });
 
