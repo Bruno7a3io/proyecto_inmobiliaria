@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, Image, ScrollView, Animated,Dimensions, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Ionicons'; // Importa el ícono de Ionicons
-
+import MapView, { Marker } from 'react-native-maps'; // Importa MapView y Marker
 
 import logo from '../assets/logo_sin_fondo.png';
 import useDolar from './dolarapi';
@@ -95,6 +95,10 @@ const PropertyDetail = ({ route }) => {
     setModalVisible(false); setSelectedImage(null); };
   
 
+  // Mapa: Se utiliza la latitud y longitud de la propiedad
+  const latitude = parseFloat(property.latitud) || -35.6566200;
+  const longitude = parseFloat(property.longitud) || -63.7568200;
+
     return (
     <ScrollView style={styles.scrollContainer}>
     <View style={styles.container}>
@@ -179,10 +183,29 @@ const PropertyDetail = ({ route }) => {
     </Modal>
   )}
 </View>
+  {/* Mapa de la propiedad */}
+  <Text>Ubicación:</Text>
+  <View style={styles.mapContainer}>
+                <MapView
+                    style={styles.map}
+                    initialRegion={{
+                        latitude: latitude,
+                        longitude: longitude,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                    showsUserLocation={true}
+                    loadingEnabled={true}
+                >
+                    <Marker coordinate={{ latitude: latitude, longitude: longitude }} />
+                </MapView>
+            </View>
 
 
+</View>
 
-        </View>
+        
+
         </View>
 
     
@@ -313,6 +336,14 @@ closeButton: {
   top: 10, 
   right: 25, 
   zIndex: 1, },
+  mapContainer: {
+    height: 300,  // Ajusta el alto del mapa
+    marginVertical: 20,
+  },
+  map: {
+    flex: 1,
+    borderRadius: 10,
+  },
 });
 
 export default PropertyDetail;

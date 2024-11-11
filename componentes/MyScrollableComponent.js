@@ -10,6 +10,7 @@ import AnimacionTexto from './animaciontexto';
 import StarRating from './StarRating';
 import CustomButton from './CustomButton'; 
 import PropertyCard from './PropertyCard'; 
+import Modallogin from './Modallogin';  // Ajusta la ruta según sea necesario
 
 
 import { getData, getObj, storeData, storeObj } from './service/data';
@@ -127,6 +128,9 @@ const MyScrollableComponent = ( {navigation} ) => {
     borderRadius: 5,
   });
 
+    //modal login
+    const [modalVisible, setModalVisible] = useState(true); // Estado para el modal
+
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
@@ -151,11 +155,12 @@ const MyScrollableComponent = ( {navigation} ) => {
             </AnimacionTexto>
           </View>
           <StatusBar style="auto" />
+          <Modallogin />
         </View>
 
+  
         
         
-
         {/* contenido */}
         <View style={styles.contenido}>
           <View>
@@ -214,22 +219,26 @@ const MyScrollableComponent = ( {navigation} ) => {
       <Text style={{ color: finalidadSeleccionada === '' ? '#fff' : '#000' }}>Todos</Text>
     </TouchableOpacity>
     <TouchableOpacity
-      style={getButtonStyle(finalidadSeleccionada === '0')}
-      onPress={() => handleFinalidadChange('0')}
+      style={getButtonStyle(finalidadSeleccionada === 0)}
+      onPress={() => handleFinalidadChange(0)}
     >
-      <Text style={{ color: finalidadSeleccionada === '0' ? '#fff' : '#000' }}>Alquilar</Text>
+      <Text style={{ color: finalidadSeleccionada === 0 ? '#fff' : '#000' }}>Alquilar</Text>
     </TouchableOpacity>
     <TouchableOpacity
-      style={getButtonStyle(finalidadSeleccionada === '1')}
-      onPress={() => handleFinalidadChange('1')}
+      style={getButtonStyle(finalidadSeleccionada === 1)}
+      onPress={() => handleFinalidadChange(1)}
     >
-      <Text style={{ color: finalidadSeleccionada === '1' ? '#fff' : '#000' }}>Comprar</Text>
+      <Text style={{ color: finalidadSeleccionada === 1 ? '#fff' : '#000' }}>Comprar</Text>
     </TouchableOpacity>
   </ScrollView>
     </View>
+
+    
          
           {isLoading ? (
           <ActivityIndicator />
+          ) : propiedad.length === 0 ? (
+            <Text style={{ textAlign: 'center', marginTop: 20, fontSize: 18 }}>No hay propiedades disponibles</Text> // Muestra este mensaje si no hay propiedades
           ) : (
           propiedad.map((item) => (
           <PropertyCard
@@ -262,6 +271,9 @@ const MyScrollableComponent = ( {navigation} ) => {
             <Text style={styles.preciovalor}> calle 15 733 </Text>  
           </Text>
         </View>
+
+      
+
       </View>
     </ScrollView>
   );
