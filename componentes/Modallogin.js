@@ -1,70 +1,82 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Modal, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Modal, Button, StyleSheet, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const Modallogin = () => {
-  // Estado para manejar la visibilidad del modal y los campos del formulario
-  const [isModalVisible, setIsModalVisible] = useState(true); // El modal se muestra al inicio
-  const [name, setName] = useState('');
+const Modallogin = ({ isModalVisible, setIsModalVisible }) => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigation = useNavigation();
 
-  // Función para cerrar el modal
-  const closeModal = () => {
-    setIsModalVisible(false);
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Por favor, ingrese ambos campos');
+      return;
+    }
+
+   
+
+    try {
+      const response = await fetch('http://10.0.2.2/api/12_11login.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            EMAIL: email,
+            password: password,
+        }),
+    });
+
+      const result = await response.json();
+      if (result.status === 200) {
+        navigation.navigate('PantallaUsuario', { userData: result.data });
+        setIsModalVisible(false);
+      } else {
+        Alert.alert('Error', result.message);
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Hubo un problema al iniciar sesión');
+    }
   };
 
   return (
-    <View style={styles.container}>
-      {/* Modal de registro */}
-      <Modal
-        visible={isModalVisible}
-        animationType="slide"  // Animación de deslizamiento
-        transparent={true}     // Fondo transparente
-        onRequestClose={closeModal} // Cierra el modal al presionar el botón de Android
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Registro de Usuario</Text>
+    <Modal visible={isModalVisible} animationType="slide" transparent={true}>
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Inicio de Sesión</Text>
 
-            {/* Campo de texto para el nombre */}
-            <TextInput
-              style={styles.input}
-              placeholder="Nombre"
-              value={name}
-              onChangeText={setName}
-            />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
 
-            {/* Campo de texto para la contraseña */}
-            <TextInput
-              style={styles.input}
-              placeholder="Contraseña"
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-            />
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
 
-            {/* Botón para registrar */}
-            <Button title="Registrar" onPress={closeModal} />
-
-            {/* Botón para cerrar el modal sin registrar */}
-            <Button title="Cerrar" onPress={closeModal} />
-          </View>
+          <Button title="Iniciar Sesión" onPress={handleLogin} />
+          <Button title="Cerrar" onPress={() => setIsModalVisible(false)} />
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo transparente oscuro
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     width: 300,

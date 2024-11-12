@@ -129,8 +129,9 @@ const MyScrollableComponent = ( {navigation} ) => {
   });
 
     //modal login
-    const [modalVisible, setModalVisible] = useState(true); // Estado para el modal
+    const [isModalVisible, setIsModalVisible] = useState(true);
 
+  
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
@@ -139,6 +140,9 @@ const MyScrollableComponent = ( {navigation} ) => {
           <View style={styles.headerContent}>
             {logo_img()}
             <Text style={styles.headerText}>Inmobiliaria Rimoldi</Text>
+            <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+              <Text>Registrarse</Text>
+            </TouchableOpacity>
           </View>
           <View>
             <AnimacionTexto>
@@ -155,7 +159,11 @@ const MyScrollableComponent = ( {navigation} ) => {
             </AnimacionTexto>
           </View>
           <StatusBar style="auto" />
-          <Modallogin />
+            {/* Modal de login */}
+            <Modallogin
+             isModalVisible={isModalVisible} 
+             setIsModalVisible={setIsModalVisible} 
+          />
         </View>
 
   
