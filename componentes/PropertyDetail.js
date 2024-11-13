@@ -1,7 +1,7 @@
 // componentes/PropertyDetail.js
 import React, {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, Image, ScrollView, Animated,Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image, ScrollView, Animated,Dimensions, TouchableOpacity, Button } from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Ionicons'; // Importa el ícono de Ionicons
 import MapView, { Marker } from 'react-native-maps'; // Importa MapView y Marker
@@ -10,6 +10,8 @@ import logo from '../assets/logo_sin_fondo.png';
 import useDolar from './dolarapi';
 import AnimacionTexto from './animaciontexto'; 
 import { useAuth } from './AuthContext';
+import Modalcontacto from './Modalcontacto'; // Importa el componente del modal
+import Modalcomentario from './Modalcomentario'; // Importa el componente del modal
 
 import { getData, getObj, storeData, storeObj } from './service/data';
 
@@ -101,7 +103,33 @@ const PropertyDetail = ({ route }) => {
   const longitude = parseFloat(property.longitud) || -63.7568200;
 
   //paralogin
-  const { isLoggedIn, logout } = useAuth(); // Accede al estado de autenticación
+  const { isLoggedIn, userData } = useAuth(); // Accede al estado de autenticación
+
+  //para comprar o alquilar
+  const [modalcVisible, setModalcVisible] = useState(false); // Estado para controlar la visibilidad del modal
+
+  // Función para mostrar el modal
+  const handleBuyPress = () => {
+    setModalcVisible(true); // Muestra el modal cuando el botón "Comprar" es presionado
+  };
+
+  // Función para cerrar el modal
+  const closeModalcontacto = () => {
+    setModalcVisible(false); // Cierra el modal
+  };
+
+  //para comentar
+  const [modalVisible, setModalcomentVisible] = useState(false); // Estado para controlar la visibilidad del modal
+
+  // Función para mostrar el modal
+  const handleCommentPress = () => {
+    setModalcomentVisible(true); // Muestra el modal cuando el botón "Enviar comentario" es presionado
+  };
+
+  // Función para cerrar el modal
+  const closeModalcomentario = () => {
+    setModalcomentVisible(false); // Cierra el modal
+  };
 
     return (
     <ScrollView style={styles.scrollContainer}>
@@ -132,18 +160,19 @@ const PropertyDetail = ({ route }) => {
       <View style={styles.contenido}>
         <View>
         <Image source={{ uri: property.imgprincipal || 'imagen principal' }} style={styles.image} />
-          <Text style={styles.title}>{property.nombre || 'Nombre de la propiedad'}</Text>
-          <Text style={styles.price}>{isLoggedIn ? `Precio:$${property.precio_alquiler_minimo || 0}` : 'Precio: Restringido'}</Text>
+          <Text style={styles.title}>{isLoggedIn ? `Precio:$${property.precio_alquiler_minimo || 0}` : 'Precio: Restringido'}</Text>
           <Text style={styles.category}>Categoría: {property.categoria || 'Desconocido'}</Text>
-          <Text style={styles.date}>Fecha de alta: {property.fecha_alta || 'Fecha desconocida'}</Text>
           <Text style={styles.address}>Dirección: {property.direccion || 'Dirección desconocida'}</Text>
           <Text style={styles.address}>Metros cuadrados cubiertos: {property.M2_cubiertos || 'Desconocido'}</Text>
           <Text style={styles.address}>Metros cuadrados descubiertos: {property.M2_descubiertos || 'Desconocido'}</Text>
-          <Text style={styles.address}>Condiciones garantes: {property.condiciones_garantes || 'Desconocido'}</Text>
-          <Text style={styles.address}>Expensas: {property.expensas_minimo || 'Desconocido'}</Text>
-          <Text style={styles.address}>Gastos minimos: {property.gastos_minimos || 'Desconocido'}</Text>
+          {Number(property.finalidad) === 0 ? (
+          <>
+            <Text style={styles.address}>Condiciones garantes: {property.condiciones_garantes || 'Desconocido'}</Text>
+            <Text style={styles.address}>Expensas: {property.expensas_minimo || 'Desconocido'}</Text>
+            <Text style={styles.address}>Gastos mínimos: {property.gastos_minimos || 'Desconocido'}</Text>
+          </>
+          ) : null}
           <Text style={styles.address}>Fecha actualizacion precio: {property.fecha_precio_minimo || 'Desconocido'}</Text>
-          <Text style={styles.address}>Disponible: {property.disponible || 'Desconocido'}</Text>
           <Text style={styles.address}>Descripción: {property.descripcion || 'Desconocido'}</Text>
             
 
@@ -204,12 +233,34 @@ const PropertyDetail = ({ route }) => {
                     <Marker coordinate={{ latitude: latitude, longitude: longitude }} />
                 </MapView>
             </View>
+            {isLoggedIn ?(
+            <>
+            {Number(property.finalidad) === 1 ? (
+               <>
+              <View>
+              <Button title="Comprar" onPress={handleBuyPress} />
+              {/* Modal */}
+              <Modalcontacto visible={modalcVisible} onClose={closeModalcontacto} />
+              </View> 
+              </>
+          ) :  
+              <View>
+              <Button title="Alquilar" onPress={handleBuyPress} />
+              {/* Modal */}
+              <Modalcontacto visible={modalcVisible} onClose={closeModalcontacto} />
+              </View> }
+              </>) : null }
+               {/* Botón para activar el modal */}
+              <Button title="Enviar comentario" onPress={handleCommentPress} />
 
-
-</View>
-
-        
-
+              {/* Modal */}
+              <Modalcomentario
+              visible={modalVisible}
+              onClose={closeModalcomentario}
+              isLoggedIn={isLoggedIn}
+              userData={userData} 
+              />
+            </View>
         </View>
 
     

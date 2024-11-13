@@ -2,7 +2,7 @@
 //http://localhost/10_10_inmobiliaria/inmobiliaria/assets/casa1.png
 import React, {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Animated, ScrollView, Dimensions, SafeAreaView, Alert, ActivityIndicator, FlatList, Button, TouchableOpacity   } from 'react-native';
+import { StyleSheet, Text, View, Image, Animated, ScrollView, Dimensions, SafeAreaView, Alert, ActivityIndicator, FlatList, Button, TouchableOpacity, Linking} from 'react-native';
 
 import ImageCarousel from './ImageCarousel'; 
 import useDolar from './dolarapi';
@@ -147,6 +147,19 @@ const MyScrollableComponent = ( {navigation} ) => {
           console.warn("Navigation prop is undefined");
         }
       }
+
+      //para contacto
+      const handleEmailPress = () => {
+        Linking.openURL('mailto:Rimoldiinmobiliaria@gmail.com');
+      };
+    
+      const handlePhonePress = () => {
+        Linking.openURL('tel:123');
+      };
+    
+      const handleWhatsAppPress = () => {
+        Linking.openURL('whatsapp://send?phone=2302735637');
+      };
   
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -278,6 +291,17 @@ const MyScrollableComponent = ( {navigation} ) => {
   </ScrollView>
     </View>
 
+    {isLoggedIn && userData ? (
+              <>
+             </>
+            ) : (
+            <>
+            <Text style={{padding: 10}}>Importante: debe estar registrado par ver los precios</Text>
+           <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+              <Text style={{textAlign: 'center'}}>Registrarse</Text>
+            </TouchableOpacity>
+            </>
+          )}
     
          
           {isLoading ? (
@@ -303,13 +327,17 @@ const MyScrollableComponent = ( {navigation} ) => {
         {/* footer */}
         <View style={styles.footer}>
           {logo_img()}
-          <Text style={styles.headerText2}>
-            <Text>email:</Text>
-            <Text style={styles.preciovalor}> Rimoldiinmobiliaria@gmail.com </Text>
+          <Text style={styles.headerText2} onPress={handleEmailPress}>
+          <Text>Email: </Text>
+            <Text style={styles.preciovalor}>Rimoldiinmobiliaria@gmail.com</Text>
           </Text>
-          <Text style={styles.headerText2}>
-            <Text>Teléfono:</Text> 
-            <Text style={styles.preciovalor}> 2302 - 735637 </Text>  
+          <Text style={styles.headerText2} onPress={handlePhonePress}>
+          <Text>Teléfono: </Text>
+            <Text style={styles.preciovalor}>2302 - 443344</Text>
+          </Text>
+          <Text style={styles.headerText2} onPress={handleWhatsAppPress}>
+          <Text>WhatsApp: </Text>
+            <Text style={styles.preciovalor}>2302 - 735637</Text>
           </Text>
           <Text style={styles.headerText2}>
             <Text>Dirección:</Text>
