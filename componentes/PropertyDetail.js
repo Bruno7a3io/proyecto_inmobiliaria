@@ -1,51 +1,24 @@
 // componentes/PropertyDetail.js
 import React, {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, Image, ScrollView, Animated,Dimensions, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, View, Text, Image, ScrollView, Dimensions, TouchableOpacity, Button } from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Ionicons'; // Importa el ícono de Ionicons
 import MapView, { Marker } from 'react-native-maps'; // Importa MapView y Marker
-
-import logo from '../assets/logo_sin_fondo.png';
 import useDolar from './dolarapi';
-import AnimacionTexto from './animaciontexto'; 
 import { useAuth } from './AuthContext';
 import Modalcontacto from './Modalcontacto'; // Importa el componente del modal
 import Modalcomentario from './Modalcomentario'; // Importa el componente del modal
+import Header from './Header';  // Ajusta la ruta según sea necesario
+import Footer from './Footer';
 
-import { getData, getObj, storeData, storeObj } from './service/data';
+import { getData, getObj} from './service/data';
 
-const PropertyDetail = ({ route }) => {
-    const { property } = route.params; // Asegúrate de que esta línea esté presente
-
-      //imagen logo
-  const logo_img = () => (
-    <Image source={logo} style={styles.logo} />
-  );
+const PropertyDetail = ({ route, navigation }) => {
+  const { property } = route.params; // Asegúrate de que esta línea esté presente
 
   const { precioDolar, fechaDolar } = useDolar();
 
-  //para animacion texto
-  const animatedValue = new Animated.Value(0);
-
-  useEffect(() => {
-    const moveText = () => {
-      animatedValue.setValue(0);
-      Animated.timing(animatedValue, {
-        toValue: 1,
-        duration: 12500,
-        useNativeDriver: true,
-      }).start(() => moveText());
-    };
-
-    moveText();
-  }, [animatedValue]);
-
-  const translateX = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [375, -375],
-  });
-    
     //para db
    const [mykey, setmykey] = useState(null);
    const [mykeyobj, setmykeyobj] = useState(null);
@@ -88,14 +61,15 @@ const PropertyDetail = ({ route }) => {
   : (property.galeria ? property.galeria.split(',') : []);
 
   const screenWidth = Dimensions.get('window').width;
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalgaleriaVisible, setModalgaleriaVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const openModal = (imageUrl) => { 
-    setSelectedImage(imageUrl); setModalVisible(true); }; 
+    setSelectedImage(imageUrl); setModalgaleriaVisible(true); }; 
   
   const closeModal = () => { 
-    setModalVisible(false); setSelectedImage(null); };
+    setModalgaleriaVisible(null); };
   
 
   // Mapa: Se utiliza la latitud y longitud de la propiedad
@@ -103,7 +77,12 @@ const PropertyDetail = ({ route }) => {
   const longitude = parseFloat(property.longitud) || -63.7568200;
 
   //paralogin
-  const { isLoggedIn, userData } = useAuth(); // Accede al estado de autenticación
+  const { isLoggedIn, userData, logout } = useAuth(); // Accede al estado de autenticación
+
+  //para cerrar sesión
+  const handleLogout = () => {
+    logout(); // Llama a la función logout para cambiar el estado
+  }
 
   //para comprar o alquilar
   const [modalcVisible, setModalcVisible] = useState(false); // Estado para controlar la visibilidad del modal
@@ -131,37 +110,32 @@ const PropertyDetail = ({ route }) => {
     setModalcomentVisible(false); // Cierra el modal
   };
 
+  const handleperfil = () => {
+    if (navigation) {
+      navigation.navigate('PantallaUsuario'); 
+    } else {
+      console.warn("Navigation prop is undefined");
+    }
+  }
+
     return (
     <ScrollView style={styles.scrollContainer}>
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          {logo_img()}
-          <Text style={styles.headerText}>Inmobiliaria Rimoldi</Text>
-        </View>
-        <View>
-          <AnimacionTexto>
-            <View style={styles.headerContent}>
-              <Text style={styles.headerText2}>
-                <Text style={styles.precioLabel}>Precio dólar oficial: </Text>  
-                <Text style={styles.preciovalor}>{precioDolar ? `$${precioDolar}` : 'Cargando...'}</Text>
-              </Text>
-              <Text style={styles.headerText2}>
-                <Text style={styles.precioLabel}>fecha: </Text>   
-                <Text style={styles.preciovalor}>{fechaDolar ? `${fechaDolar}` : 'Cargando...'}</Text>
-              </Text>
-            </View>
-          </AnimacionTexto>
-        </View>
-        <StatusBar style="auto" />
-      </View>
-
+       {/* Header */}
+       <Header 
+        navigation={navigation}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        precioDolar={precioDolar}
+        fechaDolar={fechaDolar}
+        handleperfil={handleperfil}
+        handleLogout={handleLogout}
+      />
       <View style={styles.contenido}>
         <View>
         <Image source={{ uri: property.imgprincipal || 'imagen principal' }} style={styles.image} />
           <Text style={styles.title}>{isLoggedIn ? `Precio:$${property.precio_alquiler_minimo || 0}` : 'Precio: Restringido'}</Text>
-          <Text style={styles.category}>Categoría: {property.categoria || 'Desconocido'}</Text>
+          <Text style={styles.address}>Categoría: {property.categoria || 'Desconocido'}</Text>
           <Text style={styles.address}>Dirección: {property.direccion || 'Dirección desconocida'}</Text>
           <Text style={styles.address}>Metros cuadrados cubiertos: {property.M2_cubiertos || 'Desconocido'}</Text>
           <Text style={styles.address}>Metros cuadrados descubiertos: {property.M2_descubiertos || 'Desconocido'}</Text>
@@ -198,7 +172,7 @@ const PropertyDetail = ({ route }) => {
 
   {selectedImage && (
     <Modal
-      visible={isModalVisible}
+      visible={isModalgaleriaVisible}
       onRequestClose={closeModal}
       transparent={true}
       animationType="slide"
@@ -263,24 +237,10 @@ const PropertyDetail = ({ route }) => {
             </View>
         </View>
 
-    
- {/* footer */}
- <View style={styles.footer}>
- {logo_img()}
- <Text style={styles.headerText2}>
-   <Text>email:</Text>
-   <Text style={styles.preciovalor}> Rimoldiinmobiliaria@gmail.com </Text>
- </Text>
- <Text style={styles.headerText2}>
-   <Text>Teléfono:</Text> 
-   <Text style={styles.preciovalor}> 2302 - 735637 </Text>  
- </Text>
- <Text style={styles.headerText2}>
-   <Text>Dirección:</Text>
-   <Text style={styles.preciovalor}> calle 15 733 </Text>  
- </Text>
-</View>
-</View>
+        
+  {/* footer */}
+  <Footer />
+  </View>
 </ScrollView>
   );
 }
@@ -295,55 +255,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#f5f5f5',
   },
-  header: {
-    flex: 1,
-    width: '100%',
-    padding: 2,
-    backgroundColor: '#697565',
-    alignItems: 'left',
-    position: 'absolute',
-    top: 0,
-  },
-  headerContent: {
-    flexDirection: 'row', 
-    alignItems: 'center',
-  },  
-  headerText: {
-    fontSize: 25,
-    color: '#f5f5f5',
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
-  headerText2: {
-    fontSize: 15,
-    color: '#f5f5f5',
-    fontWeight: 'bold',
-    marginLeft: 20,
-  },
-  preciovalor: {
-    color: '#1E3E62',
-  },
-  logo: {
-    width: 100, 
-    height: 100, 
-  },
   contenido: {
     flex: 3,
-    paddingTop: 135,
-    paddingHorizontal: 40,
-  },
-  footer: {
-    alignItems: 'center',
-    marginTop: 40,
-    flex: 2,
-    width: '100%',
-    backgroundColor: '#697565',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start', 
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    padding: 40,
+    marginTop: 150,
   },
 image: {
   width: Dimensions.get('window').width - 60,
@@ -358,14 +273,6 @@ marginBottom: 10,
 price: {
 fontSize: 18,
 color: '#1E3E62',
-marginBottom: 5,
-},
-category: {
-fontSize: 16,
-marginBottom: 5,
-},
-date: {
-fontSize: 16,
 marginBottom: 5,
 },
 address: {

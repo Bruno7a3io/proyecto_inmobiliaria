@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Modal, Button, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from './AuthContext'; // Importa el contexto de autenticación
@@ -6,8 +6,33 @@ import { useAuth } from './AuthContext'; // Importa el contexto de autenticació
 const Modallogin = ({ isModalVisible, setIsModalVisible }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [attempts, setAttempts] = useState(0);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [timer, setTimer] = useState(30);
   const navigation = useNavigation();
   const { login } = useAuth(); // Obtén la función login desde el contexto
+
+  useEffect(() => {
+    let interval;
+
+    if (isBlocked) {
+      // Inicia el temporizador de 30 segundos si el usuario está bloqueado
+      interval = setInterval(() => {
+        setTimer((prev) => {
+          if (prev === 1) {
+            clearInterval(interval);
+            setIsBlocked(false); // Desbloquea al usuario después de 30 segundos
+            setAttempts(0); // Reinicia el contador de intentos fallidos
+            return 30; // Reinicia el temporizador
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    // Limpia el intervalo cuando el componente se desmonte o el usuario se desbloquee
+    return () => clearInterval(interval);
+  }, [isBlocked]);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -15,26 +40,36 @@ const Modallogin = ({ isModalVisible, setIsModalVisible }) => {
       return;
     }
 
-   
+    if (isBlocked) {
+      Alert.alert('Error', `Cuenta bloqueada. Intente de nuevo en ${timer} segundos.`);
+      return;
+    }
 
     try {
       const response = await fetch('http://10.0.2.2/api/12_11login.php', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            EMAIL: email,
-            password: password,
+          EMAIL: email,
+          password: password,
         }),
-    });
+      });
 
       const result = await response.json();
       if (result.status === 200) {
-        login(result.data); // Aquí llamas a la función `login` del contexto con los datos del usuario
+        login(result.data); // Llama a la función `login` con los datos del usuario
         setIsModalVisible(false); // Cierra el modal después de iniciar sesión
+        setAttempts(0); // Reinicia los intentos al inicio de sesión exitoso
       } else {
-        Alert.alert('Error', result.message);
+        setAttempts((prev) => prev + 1);
+        if (attempts + 1 >= 3) {
+          setIsBlocked(true); // Bloquea al usuario después de 3 intentos fallidos
+          Alert.alert('Bloqueo', 'Demasiados intentos fallidos. Intente de nuevo en 30 segundos.');
+        } else {
+          Alert.alert('Error', result.message);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -65,8 +100,9 @@ const Modallogin = ({ isModalVisible, setIsModalVisible }) => {
             onChangeText={setPassword}
           />
 
-          <Button title="Iniciar Sesión" onPress={handleLogin} />
+          <Button title="Iniciar Sesión" onPress={handleLogin} disabled={isBlocked} />
           <Button title="Cerrar" onPress={() => setIsModalVisible(false)} />
+          {isBlocked && <Text style={styles.timerText}>Inténtalo de nuevo en {timer} segundos</Text>}
         </View>
       </View>
     </Modal>
@@ -101,6 +137,11 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
   },
+  timerText: {
+    color: 'red',
+    marginTop: 10,
+  },
 });
 
 export default Modallogin;
+
