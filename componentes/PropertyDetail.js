@@ -9,6 +9,7 @@ import MapView, { Marker } from 'react-native-maps'; // Importa MapView y Marker
 import logo from '../assets/logo_sin_fondo.png';
 import useDolar from './dolarapi';
 import AnimacionTexto from './animaciontexto'; 
+import { useAuth } from './AuthContext';
 
 import { getData, getObj, storeData, storeObj } from './service/data';
 
@@ -99,6 +100,9 @@ const PropertyDetail = ({ route }) => {
   const latitude = parseFloat(property.latitud) || -35.6566200;
   const longitude = parseFloat(property.longitud) || -63.7568200;
 
+  //paralogin
+  const { isLoggedIn, logout } = useAuth(); // Accede al estado de autenticación
+
     return (
     <ScrollView style={styles.scrollContainer}>
     <View style={styles.container}>
@@ -129,7 +133,7 @@ const PropertyDetail = ({ route }) => {
         <View>
         <Image source={{ uri: property.imgprincipal || 'imagen principal' }} style={styles.image} />
           <Text style={styles.title}>{property.nombre || 'Nombre de la propiedad'}</Text>
-          <Text style={styles.price}>Precio: ${property.precio_alquiler_minimo || 0}</Text>
+          <Text style={styles.price}>{isLoggedIn ? `Precio:$${property.precio_alquiler_minimo || 0}` : 'Precio: Restringido'}</Text>
           <Text style={styles.category}>Categoría: {property.categoria || 'Desconocido'}</Text>
           <Text style={styles.date}>Fecha de alta: {property.fecha_alta || 'Fecha desconocida'}</Text>
           <Text style={styles.address}>Dirección: {property.direccion || 'Dirección desconocida'}</Text>

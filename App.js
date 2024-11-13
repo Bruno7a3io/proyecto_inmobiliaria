@@ -7,11 +7,13 @@ import ConsultScreen from '../inmobiliaria/ConsultScreen'; // Asegúrate de que 
 import TestNavigation from './componentes/TestNavigation'; // Asegúrate de que la ruta sea correcta
 import PropertyDetail from './componentes/PropertyDetail'; // Asegúrate de que la ruta sea correcta
 import PantallaUsuario from './componentes/PantallaUsuario'; // Importa la pantalla de usuario
+import { AuthProvider } from './componentes/AuthContext';  // Asegúrate de importar AuthProvider
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
+    <AuthProvider> 
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={MyScrollableComponent} />
@@ -20,6 +22,7 @@ const App = () => {
         <Stack.Screen name="PantallaUsuario" component={PantallaUsuario} />
       </Stack.Navigator>
     </NavigationContainer>
+    </AuthProvider>
   );
 };
 

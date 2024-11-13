@@ -26,7 +26,7 @@ const PropertyCard = ({ price, category, date, address, imageComponent, onConsul
         </TouchableOpacity>
       <View style={styles.descripcion}>
         <Text style={{ marginLeft: 30 }}>Disponible</Text>
-        <Text style={{ marginLeft: 40, fontSize: 25 }}>${price}</Text>
+        <Text style={{ marginLeft: 40, fontSize: 25 }}>{price}</Text>
         <Text style={{ marginLeft: 55 }}>Categoría: {category}</Text>
         <Text style={{ marginLeft: 55 }}>Fecha de alta: {date}</Text>
         <Text style={{ marginLeft: 55 }}>Dirección: {address}</Text>

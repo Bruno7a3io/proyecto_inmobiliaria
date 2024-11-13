@@ -11,6 +11,7 @@ import StarRating from './StarRating';
 import CustomButton from './CustomButton'; 
 import PropertyCard from './PropertyCard'; 
 import Modallogin from './Modallogin';  // Ajusta la ruta según sea necesario
+import { useAuth } from './AuthContext';
 
 
 import { getData, getObj, storeData, storeObj } from './service/data';
@@ -130,7 +131,22 @@ const MyScrollableComponent = ( {navigation} ) => {
 
     //modal login
     const [isModalVisible, setIsModalVisible] = useState(true);
+    const { isLoggedIn, userData,  logout  } = useAuth(); // Accede al estado de autenticación
 
+    
+
+    
+      const handleLogout = () => {
+        logout(); // Llama a la función logout para cambiar el estado
+      }
+    
+      const handleperfil = () => {
+        if (navigation) {
+          navigation.navigate('PantallaUsuario'); 
+        } else {
+          console.warn("Navigation prop is undefined");
+        }
+      }
   
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -140,9 +156,30 @@ const MyScrollableComponent = ( {navigation} ) => {
           <View style={styles.headerContent}>
             {logo_img()}
             <Text style={styles.headerText}>Inmobiliaria Rimoldi</Text>
-            <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+               {isLoggedIn && userData ? (
+              <>
+              <View style={{ alignItems: 'center' }}>
+  {/* Renderizamos el nombre del usuario dentro de un componente <Text> */}
+  <TouchableOpacity onPress={handleperfil} style={{ marginVertical: 20 }}>
+    <Image source={{ uri: userData.avatar }} style={styles.avatar} />
+  </TouchableOpacity>
+  {/* Cerrar sesión */}
+  <View style={{ marginVertical: 8 }}>
+    <Button title="Salir" onPress={handleLogout} />
+  </View>
+
+ 
+</View>
+             </>
+            ) : (
+            <>
+           <TouchableOpacity onPress={() => setIsModalVisible(true)}>
               <Text>Registrarse</Text>
             </TouchableOpacity>
+            </>
+          )}
+
+          
           </View>
           <View>
             <AnimacionTexto>
@@ -251,7 +288,7 @@ const MyScrollableComponent = ( {navigation} ) => {
           propiedad.map((item) => (
           <PropertyCard
             key={item.idPropiedad}
-            price={item.precio_alquiler_minimo || 0}
+            price= {isLoggedIn ? `$${item.precio_alquiler_minimo || 0}` : 'Precio: Restringido'}
             category={item.categoria || "Desconocido"}
             date={item.fecha_alta || "Fecha desconocida"}
             address={item.direccion || "Dirección desconocida"}
@@ -314,7 +351,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: '#f5f5f5',
     fontWeight: 'bold',
-    marginLeft: 10,
+    marginRight: 5,
   },
   headerText2: {
     fontSize: 15,
@@ -326,12 +363,12 @@ const styles = StyleSheet.create({
     color: '#1E3E62',
   },
   logo: {
-    width: 100, 
-    height: 100, 
+    width: 80, 
+    height: 80, 
   },
   contenido: {
     flex: 3,
-    padding: 50,
+    padding: 40,
   },
   footer: {
     alignItems: 'center',
@@ -368,6 +405,13 @@ const styles = StyleSheet.create({
   rightContainer: {
     flex: 1, // Toma la otra mitad del espacio disponible
     paddingLeft: 10, // Añadimos un pequeño margen para separar las secciones
+  },
+  avatar: {
+    width: 50,               // Ajusta el tamaño del avatar según lo necesario
+    height: 50,              // Debe ser el mismo valor que el ancho para formar un círculo
+    borderRadius: 50,         // La mitad del ancho/alto para hacer un círculo
+    borderWidth: 2,           // Opcional: ancho del borde
+    borderColor: '#ccc',      // Opcional: color del borde
   },
 });
 

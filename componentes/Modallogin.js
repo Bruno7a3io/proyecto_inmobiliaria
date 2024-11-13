@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Modal, Button, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from './AuthContext'; // Importa el contexto de autenticación
 
 const Modallogin = ({ isModalVisible, setIsModalVisible }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
+  const { login } = useAuth(); // Obtén la función login desde el contexto
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -29,8 +31,8 @@ const Modallogin = ({ isModalVisible, setIsModalVisible }) => {
 
       const result = await response.json();
       if (result.status === 200) {
-        navigation.navigate('PantallaUsuario', { userData: result.data });
-        setIsModalVisible(false);
+        login(result.data); // Aquí llamas a la función `login` del contexto con los datos del usuario
+        setIsModalVisible(false); // Cierra el modal después de iniciar sesión
       } else {
         Alert.alert('Error', result.message);
       }
