@@ -7,8 +7,14 @@ import Modallogin from './Modallogin'; // Asegúrate de que la ruta sea correcta
 
 import logo from '../assets/logo_sin_fondo.png'; // Asegúrate de que la ruta de la imagen sea correcta
 
+
+
 const Header = ({ navigation, isModalVisible, setIsModalVisible, precioDolar, fechaDolar, handleperfil, handleLogout }) => {
   const { isLoggedIn, userData } = useAuth(); // Accede al estado de autenticación
+
+  //http://10.0.2.2/api/12_11login.php emulador
+  //http://192.168.1.69/api/12_11login.php
+  const baseURL = "http://10.0.2.2/10_10_inmobiliaria/inmobiliaria/assets/";
 
   return (
     <View style={styles.header}>
@@ -19,7 +25,7 @@ const Header = ({ navigation, isModalVisible, setIsModalVisible, precioDolar, fe
           <>
             <View style={{ alignItems: 'center' }}>
               <TouchableOpacity onPress={handleperfil} style={{ marginVertical: 20 }}>
-                <Image source={{ uri: userData.avatar }} style={styles.avatar} />
+                <Image source={ { uri: `${baseURL}${userData.avatar}` }} style={styles.avatar} />
               </TouchableOpacity>
               <View style={{ marginVertical: 8 }}>
                 <Button title="Salir" onPress={handleLogout} />

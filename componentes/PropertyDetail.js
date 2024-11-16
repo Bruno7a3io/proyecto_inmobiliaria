@@ -118,6 +118,17 @@ const PropertyDetail = ({ route, navigation }) => {
     }
   }
 
+  //para cambiar ip imagen
+     // Dirección base
+     //10.0.2.2  emulador
+      //192.168.1.69 celular
+      const baseURL = "http://10.0.2.2/10_10_inmobiliaria/inmobiliaria/assets/";
+
+      const handlevolver = () => {
+        navigation.navigate('Home'); 
+      };
+    
+
     return (
     <ScrollView style={styles.scrollContainer}>
     <View style={styles.container}>
@@ -132,8 +143,11 @@ const PropertyDetail = ({ route, navigation }) => {
         handleLogout={handleLogout}
       />
       <View style={styles.contenido}>
+      <View style={styles.buttonvolver}>
+        <Button title="Menu" onPress={handlevolver} />
+      </View>
         <View>
-        <Image source={{ uri: property.imgprincipal || 'imagen principal' }} style={styles.image} />
+        <Image source={{ uri:  `${baseURL}${property.imgprincipal}`|| 'imagen principal' }} style={styles.image} />
           <Text style={styles.title}>{isLoggedIn ? `Precio:$${property.precio_alquiler_minimo || 0}` : 'Precio: Restringido'}</Text>
           <Text style={styles.address}>Categoría: {property.categoria || 'Desconocido'}</Text>
           <Text style={styles.address}>Dirección: {property.direccion || 'Dirección desconocida'}</Text>
@@ -159,7 +173,7 @@ const PropertyDetail = ({ route, navigation }) => {
         return imageUrl ? (
           <TouchableOpacity key={index} onPress={() => openModal(imageUrl)}>
             <Image
-              source={{ uri: imageUrl }}
+              source={{ uri: `${baseURL}${imageUrl}` }}
               style={styles.imagegaleria}
             />
           </TouchableOpacity>
@@ -183,7 +197,7 @@ const PropertyDetail = ({ route, navigation }) => {
             <Icon name="close" size={30} color="#FFF" />
           </TouchableOpacity>
           <TouchableOpacity onPress={closeModal}>
-            <Image source={{ uri: selectedImage }} style={styles.image} />
+            <Image source={{ uri: `${baseURL}${selectedImage}`}} style={styles.image} />
           </TouchableOpacity>
         </View>
       </View>
@@ -305,6 +319,12 @@ closeButton: {
   map: {
     flex: 1,
     borderRadius: 10,
+  },
+  buttonvolver:{
+    alignSelf: 'flex-start',           // Alinea el botón "Pagar" a la derecha
+    width: '30%',
+    paddingBottom: 10,  
+    paddingRight: 25, // Padding derecho para el botón 
   },
 });
 

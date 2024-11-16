@@ -17,12 +17,20 @@ const PropertyCard = ({ price, category, date, address, imageComponent, onConsul
     // Define un estilo dinámico para el borde
     const cardBorderStyle = status === 1 ? styles.redBorder : styles.blueBorder;
 
+    //para cambiar ip imagen
+     // Dirección base
+     //10.0.2.2  emulador
+      //192.168.1.69 celular
+     const baseURL = "http://10.0.2.2/10_10_inmobiliaria/inmobiliaria/assets/";
+    
+  
+
   return (
     <View style={[styles.tarjeta, cardBorderStyle]}>
       {/* Renderiza el componente de imagen que pasas como prop */}
       {/* Imagen que al tocar se agranda */}
         <TouchableOpacity onPress={toggleModal}>
-        <Image source={{ uri: `${imageComponent}` }} style={styles.image} />
+        <Image source={{ uri: `${baseURL}${imageComponent}` }}style={styles.image}/>
         </TouchableOpacity>
       <View style={styles.descripcion}>
         <Text style={{ marginLeft: 30 }}>Disponible</Text>

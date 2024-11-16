@@ -2,15 +2,11 @@
 //http://localhost/10_10_inmobiliaria/inmobiliaria/assets/casa1.png
 import React, {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Animated, ScrollView, Dimensions, SafeAreaView, Alert, ActivityIndicator, FlatList, Button, TouchableOpacity, Linking} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, SafeAreaView, ActivityIndicator,TouchableOpacity} from 'react-native';
 
 import ImageCarousel from './ImageCarousel'; 
 import useDolar from './dolarapi';
-import AnimacionTexto from './animaciontexto'; 
-import StarRating from './StarRating';
-import CustomButton from './CustomButton'; 
 import PropertyCard from './PropertyCard'; 
-import Modallogin from './Modallogin';  // Ajusta la ruta según sea necesario
 import Header from './Header';  // Ajusta la ruta según sea necesario
 import Filtros from './Filtros';
 import Footer from './Footer';
@@ -62,12 +58,13 @@ const MyScrollableComponent = ( {navigation} ) => {
       setmykeyobj(vkeyobj);
     }
   };
-
+  //10.0.2.2 emulador
+  //192.168.1.69 celuar
   const getPropiedades = async () => {
     try {
       const url = categoria 
-      ? `http://192.168.1.69/api/propiedad.php?categoria=${categoria}&finalidad=${finalidadSeleccionada}`
-      : `http://192.168.1.69/api/propiedad.php`;
+      ? `http://10.0.2.2/api/propiedad.php?categoria=${categoria}&finalidad=${finalidadSeleccionada}`
+      : `http://10.0.2.2/api/propiedad.php`;
     
       const response = await fetch(url);
       const json = await response.json();

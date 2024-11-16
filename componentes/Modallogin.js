@@ -46,6 +46,8 @@ const Modallogin = ({ isModalVisible, setIsModalVisible }) => {
     }
 
     try {
+      //http://10.0.2.2/api/12_11login.php emulador
+      //http://192.168.1.69/api/12_11login.php
       const response = await fetch('http://10.0.2.2/api/12_11login.php', {
         method: 'POST',
         headers: {

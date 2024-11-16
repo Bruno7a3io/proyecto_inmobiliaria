@@ -1,7 +1,7 @@
 // PantallaRegistro.js
 import React, {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView,Image, SafeAreaView, ActivityIndicator,TouchableOpacity,Dimensions, Button} from 'react-native';
+import { StyleSheet, Text, View, ScrollView,Image,Linking, SafeAreaView, ActivityIndicator,TouchableOpacity,Dimensions, Button} from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import ImageCarousel from './ImageCarousel'; 
@@ -10,14 +10,13 @@ import PropertyCard from './PropertyCard';
 import Header from './Header';  // Ajusta la ruta según sea necesario
 import Filtros from './Filtros';
 import Footer from './Footer';
-import Modalupdate from './modalupdate';
 import { useAuth } from './AuthContext';
 
 
 import { getData, getObj, storeData, storeObj } from './service/data';
 
 
-const PantallaUsuario = ({navigation}) => {
+const PantallaAlq = ({navigation}) => {
 
   //hook para el precio del dolar
   const { precioDolar, fechaDolar } = useDolar();
@@ -87,24 +86,14 @@ const PantallaUsuario = ({navigation}) => {
       console.warn("Navigation prop is undefined");
     }
   }
-  
-  const handleperfil = () => {
-    // Nada
-  };
-
-  const screenWidth = Dimensions.get('window').width;
 
   const handlevolver = () => {
-    navigation.navigate('Home'); 
+    navigation.navigate('PantallaUsuario'); 
   };
-
-  const handlealq = () => {
-    if (navigation) {
-      navigation.navigate('PantallaAlq'); 
-    } else {
-      console.warn("Navigation prop is undefined");
-    }
-  }
+  
+  const handleperfil = () => {
+    navigation.navigate('PantallaUsuario'); 
+  };
 
   const handlecomp = () => {
     if (navigation) {
@@ -113,10 +102,16 @@ const PantallaUsuario = ({navigation}) => {
       console.warn("Navigation prop is undefined");
     }
   }
-//modal update
-const [isModalVisibleupdate, setIsModalVisibleupdate] = useState(false);
 
+  const screenWidth = Dimensions.get('window').width;
 
+  //para API  mercado pago
+  const mercadoPagoLink = 'https://api.mercadopago.com/checkout/preferences';
+
+  const handlePagar = () => {
+    // Abre el enlace de Mercado Pago en el navegador del dispositivo
+    Linking.openURL(mercadoPagoLink).catch((err) => console.error('Error al abrir el enlace', err));
+  };
   return (
     <ScrollView style={styles.scrollContainer}>
     <View style={styles.container}>
@@ -133,51 +128,40 @@ const [isModalVisibleupdate, setIsModalVisibleupdate] = useState(false);
       <View style={styles.contenido}>
         <Text style={styles.text}>Perfil</Text>
         <View style={styles.buttonvolver}>
-        <Button title="Menu" onPress={handlevolver} />
+        <Button title="Perfil" onPress={handlevolver} />
       </View>
         <View style={styles.menubotones}>
-    <View style={styles.buttonContainer}>
-    <Button title="Datos" onPress={() => setIsModalVisibleupdate(true)} />
-    <Modalupdate 
-        isModalVisible={isModalVisibleupdate} 
-        setIsModalVisible={setIsModalVisibleupdate} 
-        userData={userData} 
-      />
-    </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Datos" onPress={() => alert('Botón 1 presionado')} />
+      </View>
       <View style={styles.buttonContainer}>
         <Button title="Ventas" onPress={handlecomp} />
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Alquileres" onPress={handlealq} />
+      <Button title="Alquileres" disabled={true}/>
       </View>
     </View>
-    <Text style={styles.text}>Mis Alquileres</Text>
-    <View style={[styles.tarjeta]}>
+    <Text style={styles.text}>Mi Alquiler</Text>
+    <Text style={styles.texto}>Alquiler N-1</Text>
   {/* Imagen que al tocar se agranda */}
   <Image source={require('../assets/casa1.png')} style={styles.image} />
   <View style={styles.descripcion}>
     <Text style={[styles.texto, { fontSize: 25 }]}>Monto: $500.000</Text>
-    <Text style={styles.texto}>Fecha de vencimiento: 25-11-24</Text>
+    <Text style={styles.texto}>meses de alquiler: 13</Text>
+    <Text style={styles.texto}>Fecha de vencimiento alquiler: 25-11-24</Text>
     <Text style={styles.texto}>Dirección: Calle 15 414 N</Text>
-    <View style={styles.botonContainer}>
-      <Button title="Detalles" onPress={handlealq} />
-    </View>
-  </View>
-</View>
+    <Text style={styles.texto}>Fecha de vencimiento contrato: 06-04-25</Text>
+    
+        <View style={styles.buttonRow}>
+            <Button title="Cancelar" onPress={() => alert('Se cancelo el contrato')} />
+            <Button title="Reclamar" onPress={() => alert('Reclamo recibido')} />
+        </View>
 
-    <Text style={styles.text}>Mis Ventas</Text>
-    <View style={[styles.tarjeta]}>
-  {/* Imagen que al tocar se agranda */}
-  <Image source={require('../assets/casa1.png')} style={styles.image} />
-  <View style={styles.descripcion}>
-  <Text style={[styles.texto, { fontSize: 25 }]}>Monto: $70000.000</Text>
-    <Text style={styles.texto}>Dirección: Calle 14 573 N</Text>
-    <View style={styles.botonContainer}>
-      <Button title="Detalles" onPress={handlecomp} />
-    </View>
+      {/* Fila para el tercer botón alineado a la derecha */}
+        <View style={styles.buttonPagar}>
+            <Button title="Pagar"  onPress={handlePagar} />
+        </View>
   </View>
-</View>
-
       </View>
        {/* footer */}
        <Footer />
@@ -194,28 +178,37 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start', 
     backgroundColor: '#f5f5f5',
   },
-  tarjeta: {
-    marginTop: 20,
-    marginBottom: 15,
-    backgroundColor: '#FAF7F0',
-    width: Dimensions.get('window').width - 60,
-    marginHorizontal: 15,
-    borderRadius: 20,
-    elevation: 8,
-    alignItems: 'center',
-  },
   descripcion: {
     paddingHorizontal: 15,
     width: '100%',
+    marginTop: 20, // Separación extra antes de la descripción
   },
   texto: {
     marginLeft: 10, // Margen izquierdo para cada texto
+    marginBottom: 10, // Espacio entre cada texto
   },
   botonContainer: {
+    marginTop: 20, // Espacio extra antes del botón
     flexDirection: 'row',
     justifyContent: 'flex-end',
     paddingBottom: 10,
     paddingRight: 10, // Padding derecho para el botón
+  },
+  buttonRow: {
+    flexDirection: 'row',           // Coloca los botones en una fila
+    justifyContent: 'space-between', // Alinea los botones a la izquierda y derecha
+    width: '60%',                  // Asegura que los botones ocupen todo el ancho disponible
+    marginBottom: 20,               // Agrega espacio entre las filas de botones
+  },
+  buttonvolver:{
+    alignSelf: 'flex-start',           // Alinea el botón "Pagar" a la derecha
+    width: '30%',
+    paddingBottom: 10,  
+    paddingRight: 25, // Padding derecho para el botón 
+  },
+  buttonPagar: {
+    alignSelf: 'flex-end',           // Alinea el botón "Pagar" a la derecha
+    width: '40%',                   // Asegura que ocupe todo el ancho
   },
   contenido: {
     flex: 3,
@@ -223,9 +216,15 @@ const styles = StyleSheet.create({
     marginTop: 150,
   },
   text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'left', // Alineación a la izquierda
+    fontSize: 20,
+    marginBottom: 10, // Agrega espacio debajo del primer texto
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+    marginBottom: 20, // Espacio debajo de la imagen
+    borderRadius: 20,
   },
   menubotones: {
     flex: 1,
@@ -239,17 +238,7 @@ const styles = StyleSheet.create({
     flex: 1, // Hace que cada botón ocupe el mismo espacio
     marginHorizontal: 5, // Espacio entre los botones
   },
-  image: {
-    width: Dimensions.get('window').width - 60,
-    height: 300,
-    borderRadius: 20,
-  },
-  buttonvolver:{
-    alignSelf: 'flex-start',           // Alinea el botón "Pagar" a la derecha
-    width: '30%',
-    paddingBottom: 10,  
-    paddingRight: 25, // Padding derecho para el botón 
-  },
+  
 });
 
-export default PantallaUsuario;
+export default PantallaAlq;
