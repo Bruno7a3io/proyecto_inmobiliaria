@@ -13,6 +13,7 @@ import Header from '../componentes/moleculas/Header';  // Ajusta la ruta según 
 import Footer from '../componentes/moleculas/Footer';
 import CustomButton from '../componentes/CustomButton';
 import Secboton from '../componentes/atomos/Secboton';
+import Mapacomp from '../componentes/Mapacomp';
 
 import { getData, getObj} from '../componentes/service/data';
 
@@ -207,22 +208,7 @@ const PropertyDetail = ({ route, navigation }) => {
   )}
 </View>
   {/* Mapa de la propiedad */}
-  <Text>Ubicación:</Text>
-  <View style={styles.mapContainer}>
-                <MapView
-                    style={styles.map}
-                    initialRegion={{
-                        latitude: latitude,
-                        longitude: longitude,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
-                    showsUserLocation={true}
-                    loadingEnabled={true}
-                >
-                    <Marker coordinate={{ latitude: latitude, longitude: longitude }} />
-                </MapView>
-            </View>
+  <MapComponent latitude={latitude} longitude={longitude} />
             {isLoggedIn ?(
             <>
             {Number(property.finalidad) === 1 ? (
