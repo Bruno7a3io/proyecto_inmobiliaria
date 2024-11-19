@@ -6,7 +6,7 @@ const Filtros = ({ categoria, setCategoria, finalidadSeleccionada, setFinalidadS
 
   // Estilos para los botones seleccionados
   const getButtonStyle = (isSelected) => ({
-    backgroundColor: isSelected ? '#4CAF50' : '#f0f0f0',
+    backgroundColor: isSelected ? '#A91D3A' : '#dedede',
     padding: 10,
     margin: 5,
     borderRadius: 5,
@@ -14,7 +14,7 @@ const Filtros = ({ categoria, setCategoria, finalidadSeleccionada, setFinalidadS
 
   return (
     <View style={styles.container}>
-      <Text>Filtrar por categoría:</Text>
+      <Text style={styles.titulo}>Filtrar por categoría:</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <TouchableOpacity
           style={getButtonStyle(categoria === '')}
@@ -48,7 +48,7 @@ const Filtros = ({ categoria, setCategoria, finalidadSeleccionada, setFinalidadS
         </TouchableOpacity>
       </ScrollView>
 
-      <Text>Filtrar por finalidad:</Text>
+      <Text style={styles.titulo}>Filtrar por finalidad:</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <TouchableOpacity
           style={getButtonStyle(finalidadSeleccionada === '')}
@@ -76,6 +76,10 @@ const Filtros = ({ categoria, setCategoria, finalidadSeleccionada, setFinalidadS
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+  },
+  titulo: {
+    fontSize: 15,
+    fontWeight: 'bold',
   },
 });
 

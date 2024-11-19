@@ -17,7 +17,7 @@ const StarRating = () => {
             <FontAwesome
               name="star"
               size={15}
-              color={star <= rating ? 'gold' : 'gray'}
+              color={star <= rating ? '#A91D3A' : 'gray'}
               style={{ marginHorizontal: 5 }}
             />
           </TouchableOpacity>

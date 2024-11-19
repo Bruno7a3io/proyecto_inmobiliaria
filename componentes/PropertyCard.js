@@ -6,6 +6,7 @@ import StarRating from './StarRating'; // Asegúrate de que la ruta sea correcta
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Ionicons'; // Importa el ícono de Ionicons
 
+
 const PropertyCard = ({ price, category, date, address, imageComponent, onConsult, status }) => {
   const screenWidth = Dimensions.get('window').width;
   const [isModalVisible, setModalVisible] = useState(false);
@@ -20,7 +21,7 @@ const PropertyCard = ({ price, category, date, address, imageComponent, onConsul
     //para cambiar ip imagen
      // Dirección base
      //10.0.2.2  emulador
-      //192.168.1.69 celular
+      //192.168.1.8 celular
      const baseURL = "http://10.0.2.2/10_10_inmobiliaria/inmobiliaria/assets/";
     
   
@@ -34,7 +35,7 @@ const PropertyCard = ({ price, category, date, address, imageComponent, onConsul
         </TouchableOpacity>
       <View style={styles.descripcion}>
         <Text style={{ marginLeft: 30 }}>Disponible</Text>
-        <Text style={{ marginLeft: 40, fontSize: 25 }}>{price}</Text>
+        <Text style={{ marginLeft: 40, fontSize: 25, color: '#A91D3A' }}>{price}</Text>
         <Text style={{ marginLeft: 55 }}>Categoría: {category}</Text>
         <Text style={{ marginLeft: 55 }}>Fecha de alta: {date}</Text>
         <Text style={{ marginLeft: 55 }}>Dirección: {address}</Text>
@@ -104,11 +105,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', // Mantiene la relación de aspecto
   },
   redBorder: {
-    borderColor: '#C96868',
+    borderColor: '#E85C0D',
     borderWidth: 4,
   },
   blueBorder: {
-    borderColor: '#7EACB5',
+    borderColor: '#0D92F4',
     borderWidth: 4,
   },
 });
