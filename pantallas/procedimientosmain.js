@@ -14,6 +14,13 @@ import Secboton from '../componentes/atomos/Secboton';
 import MyScrollableComponent from './MyScrollableComponent';
 
 
+import consulta1 from '../assets/consultar1.jpg';
+import consulta2 from '../assets/consultar2.jpg';
+import consulta3 from '../assets/consultar3.jpg';
+import consulta4 from '../assets/consultar4.jpg';
+import logo from '../assets/logo_sin_fondo.png'; // Asegúrate de que la ruta de la imagen sea correcta
+
+
 
 const Procedimientosmain = ({navigation}) => {
 
@@ -62,6 +69,28 @@ const [isModalVisibleupdate, setIsModalVisibleupdate] = useState(false);
         handleLogout={handleLogout}
       />
       <View style={styles.contenido}>
+        <Text style={styles.textimp}>1. Consultar visita a una propiedad </Text>
+        <Text style={styles.textnorm}>1. Seleccione la propiedad que le gustaria visitar</Text>
+        <Image source={consulta1} style={styles.image} />
+        <Text style={styles.textnorm}>2. Dirigirse al final de la pantalla, y precione el boton enviar comentario </Text>
+        <Image source={consulta2} style={styles.image} />
+        <Text style={styles.textnorm}>3. En caso de no estar registrado complete sus datos personales y consulte en que momento puede ir a ver la propiedad.</Text>
+        <Image source={consulta3} style={styles.image} />
+
+        <View style={styles.containerimg} >        
+        <Image source={logo} style={styles.logo} />
+        </View>
+        <Text style={styles.textimp}>2. Comprar o alquilar una propiedad </Text>
+        <Text style={styles.textimp}> Importante: debe estar registrado poder realizar este procedimiento</Text>
+            <View style={styles.registrar} >
+            <Secboton title="Registrarse" onPress={() => setIsModalVisible(true)} />
+            </View>
+            <Text style={styles.textnorm}>1. Seleccione la propiedad que le gustaria comprar o alquilar</Text>
+        <Image source={consulta1} style={styles.image} />
+        <Text style={styles.textnorm}>2. Dirigirse al final de la pantalla, y precione el boton enviar comprar o alquilar segun corresponda </Text>
+        <Image source={consulta4} style={styles.image} />
+        <Text style={styles.textnorm}>3. La inmobiliaria se pondra en contacto con usted.</Text>
+        
       
 
       </View>
@@ -126,14 +155,38 @@ const styles = StyleSheet.create({
   },
   image: {
     width: Dimensions.get('window').width - 60,
-    height: 300,
+    height: 400,
     borderRadius: 20,
+    resizeMode: 'cover',
+    borderColor: '#151515',
+    borderWidth: 4,
   },
   buttonvolver:{
     alignSelf: 'flex-start',           // Alinea el botón "Pagar" a la derecha
     paddingBottom: 10,  
     paddingRight: 25, // Padding derecho para el botón 
   },
+  textimp: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10, // Agrega espacio debajo del primer texto
+    padding: 10,
+    textAlign: 'left', // Alineación a la izquierda
+  },
+  textnorm: {
+    fontSize: 16,
+    padding: 10,
+    textAlign: 'left', // Alineación a la izquierda
+  },
+  logo: {
+    width: 80, 
+    height: 80,
+ 
+  },
+  containerimg: {
+    justifyContent: 'center', // Centra verticalmente
+    alignItems: 'center', // Centra horizontalmente 
+  }
 });
 
 export default Procedimientosmain;
