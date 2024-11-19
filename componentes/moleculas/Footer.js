@@ -1,6 +1,9 @@
 // components/Footer.js
-import React from 'react';
-import { View, Text, Image, Linking, StyleSheet } from 'react-native';
+import { View, Text, Image, Linking, StyleSheet,TouchableOpacity, Modal, Button } from 'react-native';
+import React, { useState } from 'react';
+import MapView, { Marker } from 'react-native-maps';
+import MapModal from '../MapModal';
+
 import logo from '../../assets/logo_sin_fondo.png';
 
 const Footer = () => {
@@ -14,6 +17,18 @@ const Footer = () => {
 
   const handleWhatsAppPress = () => {
     Linking.openURL('whatsapp://send?phone=2302735637');
+  };
+
+  const [isModalVisible, setModalVisible] = useState(false);
+  const latitude =  -35.6566200;
+  const longitude =  -63.7568200;
+
+  const toggleModal = () => {
+    setModalVisible(true);  // Abrir el modal
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);  // Cerrar el modal
   };
 
   return (
@@ -33,8 +48,19 @@ const Footer = () => {
       </Text>
       <Text style={styles.headerText2}>
         <Text>Dirección:</Text>
-        <Text style={styles.preciovalor}> calle 15 733 </Text>
+        <Text style={styles.preciovalor} onPress={toggleModal}>calle 15 733</Text>
       </Text>
+
+       {/* Modal con el mapa */}
+       <MapModal
+        isVisible={isModalVisible} // Pasar estado de visibilidad
+        onClose={closeModal} // Pasar la función de cerrar
+        latitude={latitude} // Pasar las coordenadas
+        longitude={longitude} // Pasar las coordenadas
+      />
+
+    
+
     </View>
   );
 };
