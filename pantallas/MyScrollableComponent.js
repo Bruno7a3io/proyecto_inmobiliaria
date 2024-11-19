@@ -10,7 +10,6 @@ import PropertyCard from '../componentes/PropertyCard';
 import Header from '../componentes/moleculas/Header';  // Ajusta la ruta según sea necesario
 import Filtros from '../componentes/Filtros';
 import Footer from '../componentes/moleculas/Footer';
-import Procedimientosmain from './procedimientosmain';
 import { useAuth } from '../componentes/service/AuthContext';
 
 
