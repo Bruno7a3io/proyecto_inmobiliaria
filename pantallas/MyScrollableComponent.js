@@ -11,6 +11,7 @@ import Header from '../componentes/moleculas/Header';  // Ajusta la ruta según 
 import Filtros from '../componentes/Filtros';
 import Footer from '../componentes/moleculas/Footer';
 import { useAuth } from '../componentes/service/AuthContext';
+import { useTheme } from '../ThemeContext'; // Importa el contexto de tema
 
 
 
@@ -112,6 +113,11 @@ const MyScrollableComponent = ( {navigation} ) => {
     }
   }
   
+  //modooscuro
+  const { isDarkMode } = useTheme(); // Obtén el estado del tema
+
+  const styles = isDarkMode ? darkStyles : lightStyles;
+
 return (
   <ScrollView style={styles.scrollContainer}>
     <View style={styles.container}>
@@ -187,9 +193,10 @@ return (
   </ScrollView>
   );
 }
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
+    backgroundColor: 'transparent', // Permite que el fondo del contenedor principal sea visible
   },
   container: {
     flex: 1,
@@ -207,6 +214,37 @@ const styles = StyleSheet.create({
     marginBottom: 10, // Agrega espacio debajo del primer texto
     padding: 10,
     textAlign: 'left', // Alineación a la izquierda
+  },
+  registrar: {
+    width:'80%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 40,
+  }
+});
+
+const darkStyles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: 'transparent', // Permite que el fondo del contenedor principal sea visible
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start', 
+    alignItems: 'center',
+    backgroundColor: '#1B1717',
+  },
+  contenido: {
+    flex: 3,
+    padding: 40,
+  },
+  textimp: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10, // Agrega espacio debajo del primer texto
+    padding: 10,
+    textAlign: 'left', // Alineación a la izquierda
+     color: '#F5F5F5',
   },
   registrar: {
     width:'80%',

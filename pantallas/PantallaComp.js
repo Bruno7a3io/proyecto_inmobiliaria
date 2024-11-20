@@ -10,12 +10,17 @@ import Footer from '../componentes/moleculas/Footer';
 import { useAuth } from '../componentes/service/AuthContext';
 import Secboton from '../componentes/atomos/Secboton';
 import CustomButton from '../componentes/CustomButton';
+import { useTheme } from '../ThemeContext'; // Importa el contexto de tema
 
 
 import { getData, getObj, storeData, storeObj } from '../componentes/service/data';
 
 
 const PantallComp = ({navigation}) => {
+
+  const { isDarkMode } = useTheme(); // Obtén el estado del tema
+
+  const styles = isDarkMode ? darkStyles : lightStyles;
 
   //hook para el precio del dolar
   const { precioDolar, fechaDolar } = useDolar();
@@ -116,7 +121,7 @@ const [isModalVisibleupdate, setIsModalVisibleupdate] = useState(false);
   </ScrollView>
   );
 }
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
   },
@@ -179,6 +184,79 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Centra verticalmente los botones
     paddingHorizontal: 10,
     backgroundColor: '#f5f5f5',
+  },
+  buttonContainer: {
+    marginHorizontal: 5, // Espacio entre los botones
+  },
+  
+});
+
+const darkStyles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: 'transparent', // Permite que el fondo del contenedor principal sea visible
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start', 
+    backgroundColor: '#1B1717',
+  },
+  descripcion: {
+    paddingHorizontal: 15,
+    width: '100%',
+    marginTop: 20, // Separación extra antes de la descripción
+  },
+  texto: {
+    marginLeft: 10, // Margen izquierdo para cada texto
+    marginBottom: 10, // Espacio entre cada texto
+    color: '#F5F5F5',
+  },
+  botonContainer: {
+    marginTop: 20, // Espacio extra antes del botón
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingBottom: 10,
+    paddingRight: 10, // Padding derecho para el botón
+  },
+  buttonRow: {
+    flexDirection: 'row',           // Coloca los botones en una fila
+    justifyContent: 'space-between', // Alinea los botones a la izquierda y derecha
+    width: '60%',                  // Asegura que los botones ocupen todo el ancho disponible
+    marginBottom: 20,               // Agrega espacio entre las filas de botones
+  },
+  buttonvolver:{
+    alignSelf: 'flex-start',           // Alinea el botón "Pagar" a la derecha
+    paddingBottom: 10,  
+    paddingRight: 25, // Padding derecho para el botón 
+  },
+  buttonPagar: {
+    alignSelf: 'flex-end',           // Alinea el botón "Pagar" a la derecha
+    width: '40%',                   // Asegura que ocupe todo el ancho
+  },
+  contenido: {
+    flex: 3,
+    padding: 20,
+    marginTop: 150,
+  },
+  text: {
+    fontSize: 20,
+    marginBottom: 10, // Agrega espacio debajo del primer texto
+    color: '#F5F5F5',
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+    marginBottom: 20, // Espacio debajo de la imagen
+    borderRadius: 20,
+  },
+  menubotones: {
+    flex: 1,
+    flexDirection: 'row', // Alinea los botones en fila
+    justifyContent: 'space-around', // Espacio entre los botones
+    alignItems: 'center', // Centra verticalmente los botones
+    paddingHorizontal: 10,
+    backgroundColor: '#1B1717',
   },
   buttonContainer: {
     marginHorizontal: 5, // Espacio entre los botones

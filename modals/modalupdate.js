@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Modal, Button, StyleSheet, Alert, ScrollView } from 'react-native';
 import Secboton from '../componentes/atomos/Secboton';
+import { useTheme } from '../ThemeContext';
 
 const Modalupdate = ({ isModalVisible, setIsModalVisible, userData }) => {
+  const { isDarkMode } = useTheme(); // Obtén el estado del tema
+
+  const styles = isDarkMode ? darkStyles : lightStyles;
+
   const [form, setForm] = useState({
     CUIL: userData?.CUIL || '',
     nombre: userData?.nombre || '',
@@ -60,6 +65,7 @@ const Modalupdate = ({ isModalVisible, setIsModalVisible, userData }) => {
                 <TextInput
                   style={styles.input}
                   placeholder={`Ingrese ${key}`}
+                  placeholderTextColor={isDarkMode ? "#F5F5F5" : "#000"} // Ajusta el color
                   value={form[key]}
                   onChangeText={(value) => handleChange(key, value)}
                 />
@@ -74,7 +80,7 @@ const Modalupdate = ({ isModalVisible, setIsModalVisible, userData }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
@@ -109,6 +115,48 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginTop: 5,
+  },
+});
+
+const darkStyles = StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    maxHeight: '80%', // Limita la altura del modal para que sea más pequeño
+    backgroundColor: '#252525', // Cambiar el color de fondo del modal (aquí lo cambiamos a un gris claro)
+    padding: 20,
+    borderRadius: 10,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#F5F5F5',
+  },
+  scrollView: {
+    width: '100%',
+    maxHeight: 300, // Limita la altura del contenido desplazable
+  },
+  inputContainer: {
+    marginBottom: 15,
+    backgroundColor: '#252525',
+    color: '#F5F5F5',
+  },
+  label: {
+    fontSize: 16,
+    color: '#F5F5F5',
+  },
+  input: {
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 5,
+    color: '#F5F5F5',
   },
 });
 

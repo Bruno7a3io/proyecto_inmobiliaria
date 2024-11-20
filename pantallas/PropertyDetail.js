@@ -14,10 +14,15 @@ import Footer from '../componentes/moleculas/Footer';
 import CustomButton from '../componentes/CustomButton';
 import Secboton from '../componentes/atomos/Secboton';
 import Mapacomp from '../componentes/Mapacomp';
+import { useTheme } from '../ThemeContext';
 
 import { getData, getObj} from '../componentes/service/data';
 
 const PropertyDetail = ({ route, navigation }) => {
+  const { isDarkMode } = useTheme(); // Obtén el estado del tema
+
+  const styles = isDarkMode ? darkStyles : lightStyles;
+
   const { property } = route.params; // Asegúrate de que esta línea esté presente
 
   const { precioDolar, fechaDolar } = useDolar();
@@ -168,7 +173,7 @@ const PropertyDetail = ({ route, navigation }) => {
             
 
           <View style={styles.containergaleria}>
-  <Text>Imágenes:</Text>
+  <Text style={styles.address}>Imágenes:</Text>
   <View style={styles.imageContainer}>
     {galeriaArray.length > 0 ? (
       galeriaArray.map((img, index) => {
@@ -183,7 +188,7 @@ const PropertyDetail = ({ route, navigation }) => {
         ) : null;
       })
     ) : (
-      <Text>No hay imágenes disponibles</Text>
+      <Text style={styles.address}>No hay imágenes disponibles</Text>
     )}
   </View>
 
@@ -208,7 +213,7 @@ const PropertyDetail = ({ route, navigation }) => {
   )}
 </View>
   {/* Mapa de la propiedad */}
-  <MapComponent latitude={latitude} longitude={longitude} />
+  <Mapacomp latitude={latitude} longitude={longitude} />
             {isLoggedIn ?(
             <>
             {Number(property.finalidad) === 1 ? (
@@ -248,7 +253,8 @@ const PropertyDetail = ({ route, navigation }) => {
   );
 }
 
-const styles = StyleSheet.create({
+
+const lightStyles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
   },
@@ -283,6 +289,78 @@ marginBottom: 5,
 address: {
 fontSize: 16,
 marginBottom: 5,
+},
+containergaleria: {
+  flex: 1,
+},
+imageContainer: {
+  flexDirection: 'row',       // Acomoda las imágenes en fila
+  flexWrap: 'wrap',           // Permite que las imágenes se acomoden en filas cuando se termine el espacio
+  justifyContent: 'flex-start',  // Alinea las imágenes al principio
+  gap: 10,                    // Espacio entre las imágenes
+},
+imagegaleria: {
+  width: 150,                 // Ajusta el tamaño de las imágenes (puedes cambiar este valor)
+  height: 150,                // Ajusta la altura
+  marginBottom: 10,           // Espacio debajo de cada imagen
+},
+closeButton: { 
+  position: 'absolute', 
+  top: 10, 
+  right: 25, 
+  zIndex: 1, },
+  mapContainer: {
+    height: 300,  // Ajusta el alto del mapa
+    marginVertical: 20,
+  },
+  map: {
+    flex: 1,
+    borderRadius: 10,
+  },
+  buttonvolver:{
+    alignSelf: 'flex-start',           // Alinea el botón "Pagar" a la derecha
+    paddingBottom: 10,  
+    paddingRight: 25, // Padding derecho para el botón 
+  },
+});
+
+const darkStyles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: 'transparent', // Permite que el fondo del contenedor principal sea visible
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start', 
+    alignItems: 'center',
+    backgroundColor: '#1B1717',
+  },
+  contenido: {
+    flex: 3,
+    padding: 40,
+    marginTop: 140,
+    marginBottom: 80,
+  },
+image: {
+  width: Dimensions.get('window').width - 60,
+  height: 300,
+  borderRadius: 20,
+},
+title: {
+fontSize: 24,
+fontWeight: 'bold',
+marginBottom: 10,
+color: '#A91D3A',
+},
+price: {
+fontSize: 18,
+color: '#F5F5F5',
+marginBottom: 5,
+},
+address: {
+fontSize: 16,
+marginBottom: 5,
+color: '#F5F5F5',
 },
 containergaleria: {
   flex: 1,

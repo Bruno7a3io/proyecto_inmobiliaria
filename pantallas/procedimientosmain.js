@@ -12,6 +12,7 @@ import { useAuth } from '../componentes/service/AuthContext';
 import CustomButton from '../componentes/CustomButton';
 import Secboton from '../componentes/atomos/Secboton';
 import MyScrollableComponent from './MyScrollableComponent';
+import { useTheme } from '../ThemeContext'; // Importa el contexto de tema
 
 
 import consulta1 from '../assets/consultar1.jpg';
@@ -23,6 +24,11 @@ import logo from '../assets/logo_sin_fondo.png'; // Asegúrate de que la ruta de
 
 
 const Procedimientosmain = ({navigation}) => {
+
+  
+  const { isDarkMode } = useTheme(); // Obtén el estado del tema
+
+  const styles = isDarkMode ? darkStyles : lightStyles;
 
   //hook para el precio del dolar
   const { precioDolar, fechaDolar } = useDolar();
@@ -49,6 +55,11 @@ const Procedimientosmain = ({navigation}) => {
     }
   }
 
+  const handlevolver = () => {
+    navigation.navigate('Home'); 
+  };
+
+
   const screenWidth = Dimensions.get('window').width;
 
 //modal update
@@ -69,6 +80,9 @@ const [isModalVisibleupdate, setIsModalVisibleupdate] = useState(false);
         handleLogout={handleLogout}
       />
       <View style={styles.contenido}>
+      <View style={styles.buttonvolver}>
+        <CustomButton title="Menu" onPress={handlevolver} />
+      </View>
         <Text style={styles.textimp}>1. Consultar visita a una propiedad </Text>
         <Text style={styles.textnorm}>1. Seleccione la propiedad que le gustaria visitar</Text>
         <Image source={consulta1} style={styles.image} />
@@ -100,7 +114,7 @@ const [isModalVisibleupdate, setIsModalVisibleupdate] = useState(false);
   </ScrollView>
   );
 }
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
   },
@@ -177,6 +191,98 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 10,
     textAlign: 'left', // Alineación a la izquierda
+  },
+  logo: {
+    width: 80, 
+    height: 80,
+ 
+  },
+  containerimg: {
+    justifyContent: 'center', // Centra verticalmente
+    alignItems: 'center', // Centra horizontalmente 
+  }
+});
+
+const darkStyles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: 'transparent', // Permite que el fondo del contenedor principal sea visible
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start', 
+    backgroundColor: '#1B1717',
+  },
+  tarjeta: {
+    marginTop: 20,
+    marginBottom: 15,
+    backgroundColor: '#FAF7F0',
+    width: Dimensions.get('window').width - 60,
+    marginHorizontal: 15,
+    borderRadius: 20,
+    elevation: 8,
+    alignItems: 'center',
+  },
+  descripcion: {
+    paddingHorizontal: 15,
+    width: '100%',
+  },
+  texto: {
+    marginLeft: 10, // Margen izquierdo para cada texto
+  },
+  botonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingBottom: 10,
+    paddingRight: 10, // Padding derecho para el botón
+  },
+  contenido: {
+    flex: 3,
+    padding: 20,
+    marginTop: 150,
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'left', // Alineación a la izquierda
+  },
+  menubotones: {
+    flex: 1,
+    flexDirection: 'row', // Alinea los botones en fila
+    justifyContent: 'space-around', // Espacio entre los botones
+    alignItems: 'center', // Centra verticalmente los botones
+    paddingHorizontal: 10,
+    backgroundColor: '#f5f5f5',
+  },
+  buttonContainer: {
+    marginHorizontal: 5, // Espacio entre los botones
+  },
+  image: {
+    width: Dimensions.get('window').width - 60,
+    height: 400,
+    borderRadius: 20,
+    resizeMode: 'cover',
+    borderColor: '#F5F5F5',
+    borderWidth: 4,
+  },
+  buttonvolver:{
+    alignSelf: 'flex-start',           // Alinea el botón "Pagar" a la derecha
+    paddingBottom: 10,  
+    paddingRight: 25, // Padding derecho para el botón 
+  },
+  textimp: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10, // Agrega espacio debajo del primer texto
+    padding: 10,
+    textAlign: 'left', // Alineación a la izquierda
+    color: '#F5F5F5',
+  },
+  textnorm: {
+    fontSize: 16,
+    padding: 10,
+    textAlign: 'left', // Alineación a la izquierda
+    color: '#F5F5F5',
   },
   logo: {
     width: 80, 

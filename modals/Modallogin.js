@@ -3,8 +3,12 @@ import { View, Text, TextInput, Modal, Button, StyleSheet, Alert } from 'react-n
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../componentes/service/AuthContext'; // Importa el contexto de autenticación
 import Secboton from '../componentes/atomos/Secboton';
+import { useTheme } from '../ThemeContext';
 
 const Modallogin = ({ isModalVisible, setIsModalVisible }) => {
+  const { isDarkMode } = useTheme(); // Obtén el estado del tema
+
+  const styles = isDarkMode ? darkStyles : lightStyles;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [attempts, setAttempts] = useState(0);
@@ -89,6 +93,7 @@ const Modallogin = ({ isModalVisible, setIsModalVisible }) => {
           <TextInput
             style={styles.input}
             placeholder="Email"
+            placeholderTextColor={isDarkMode ? "#F5F5F5" : "#000"} // Ajusta el color
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -98,6 +103,7 @@ const Modallogin = ({ isModalVisible, setIsModalVisible }) => {
           <TextInput
             style={styles.input}
             placeholder="Contraseña"
+            placeholderTextColor={isDarkMode ? "#F5F5F5" : "#000"} // Ajusta el color
             secureTextEntry
             value={password}
             onChangeText={setPassword}
@@ -112,7 +118,8 @@ const Modallogin = ({ isModalVisible, setIsModalVisible }) => {
   );
 };
 
-const styles = StyleSheet.create({
+
+const lightStyles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
@@ -140,6 +147,43 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderColor: '#ccc',
     borderRadius: 5,
+  },
+  timerText: {
+    color: 'red',
+    marginTop: 10,
+  },
+});
+
+const darkStyles = StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: '#252525', // Cambiar el color de fondo del modal (aquí lo cambiamos a un gris claro)
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#F5F5F5',
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    marginBottom: 20,
+    borderWidth: 1,
+    paddingLeft: 10,
+    backgroundColor: '#414141', // Cambiar el color de fondo del modal (aquí lo cambiamos a un gris claro)
+    borderColor: '#ccc',
+    borderRadius: 5,
+    color: '#F5F5F5', // Cambiar el color del texto (aquí lo cambiamos a blanco)
   },
   timerText: {
     color: 'red',

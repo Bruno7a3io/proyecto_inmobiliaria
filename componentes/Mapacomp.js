@@ -1,11 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { useTheme } from '../ThemeContext'; // Importa el contexto de tema
 
 const Mapacomp = ({ latitude, longitude }) => {
+  const { isDarkMode } = useTheme(); // Obtén el estado del tema
+
+  const styles = isDarkMode ? darkStyles : lightStyles;
   return (
     <View style={styles.container}>
-      <Text>Ubicación:</Text>
+      <Text style={styles.texto}>Ubicación:</Text>
       <View style={styles.mapContainer}>
         <MapView
           style={styles.map}
@@ -25,17 +29,37 @@ const Mapacomp = ({ latitude, longitude }) => {
   );
 };
 
-const styles = StyleSheet.create({
+
+const lightStyles = StyleSheet.create({
   container: {
     flex: 1,
   },
   mapContainer: {
     flex: 1,
     marginTop: 10,
+    height: 300,
   },
   map: {
     flex: 1,
     borderRadius: 10,
+  },
+});
+
+const darkStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  mapContainer: {
+    flex: 1,
+    marginTop: 10,
+    height: 300,
+  },
+  map: {
+    flex: 1,
+    borderRadius: 10,
+  },
+  texto: {
+    color: '#F5F5F5',
   },
 });
 

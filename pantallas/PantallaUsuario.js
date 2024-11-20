@@ -11,10 +11,14 @@ import Modalupdate from '../modals/modalupdate';
 import { useAuth } from '../componentes/service/AuthContext';
 import CustomButton from '../componentes/CustomButton';
 import Secboton from '../componentes/atomos/Secboton';
+import { useTheme } from '../ThemeContext'; // Importa el contexto de tema
 
 
 
 const PantallaUsuario = ({navigation}) => {
+  const { isDarkMode } = useTheme(); // Obtén el estado del tema
+
+  const styles = isDarkMode ? darkStyles : lightStyles;
 
   //hook para el precio del dolar
   const { precioDolar, fechaDolar } = useDolar();
@@ -130,7 +134,8 @@ const [isModalVisibleupdate, setIsModalVisibleupdate] = useState(false);
   </ScrollView>
   );
 }
-const styles = StyleSheet.create({
+
+const lightStyles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
   },
@@ -195,4 +200,72 @@ const styles = StyleSheet.create({
   },
 });
 
+const darkStyles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: 'transparent', // Permite que el fondo del contenedor principal sea visible
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start', 
+    backgroundColor: '#1B1717',
+  },
+  tarjeta: {
+    marginTop: 20,
+    marginBottom: 15,
+    backgroundColor: '#171717',
+    width: Dimensions.get('window').width - 60,
+    marginHorizontal: 15,
+    borderRadius: 20,
+    elevation: 8,
+    alignItems: 'center',
+  },
+  descripcion: {
+    paddingHorizontal: 15,
+    width: '100%',
+  },
+  texto: {
+    marginLeft: 10, // Margen izquierdo para cada texto
+    color: '#F5F5F5',
+  },
+  botonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingBottom: 10,
+    paddingRight: 10, // Padding derecho para el botón
+
+  },
+  contenido: {
+    flex: 3,
+    padding: 20,
+    marginTop: 150,
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'left', // Alineación a la izquierda
+    color: '#F5F5F5',
+  },
+  menubotones: {
+    flex: 1,
+    flexDirection: 'row', // Alinea los botones en fila
+    justifyContent: 'space-around', // Espacio entre los botones
+    alignItems: 'center', // Centra verticalmente los botones
+    paddingHorizontal: 10,
+    backgroundColor: '#1B1717', // Permite que el fondo del contenedor principal sea visible
+  },
+  buttonContainer: {
+    marginHorizontal: 5, // Espacio entre los botones
+  },
+  image: {
+    width: Dimensions.get('window').width - 60,
+    height: 300,
+    borderRadius: 20,
+  },
+  buttonvolver:{
+    alignSelf: 'flex-start',           // Alinea el botón "Pagar" a la derecha
+    paddingBottom: 10,  
+    paddingRight: 25, // Padding derecho para el botón 
+  },
+});
 export default PantallaUsuario;
