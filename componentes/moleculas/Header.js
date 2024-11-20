@@ -2,6 +2,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity, Button } from 'react-native';
 import { useAuth } from '../service/AuthContext'; // Si usas autenticación
+import { useTheme } from '../../ThemeContext'; // Importa el contexto de tema
 import AnimacionTexto from '../animaciontexto'; // Importa el componente de animación si lo usas
 import Modallogin from '../../modals/Modallogin'; // Asegúrate de que la ruta sea correcta
 import Mainboton from '../atomos/Mainboton';
@@ -10,11 +11,15 @@ import logo from '../../assets/logo_sin_fondo.png'; // Asegúrate de que la ruta
 
 
 const Header = ({ navigation, isModalVisible, setIsModalVisible, precioDolar, fechaDolar, handleperfil, handleLogout }) => {
+  const { isDarkMode } = useTheme(); // Obtén el estado del tema
   const { isLoggedIn, userData } = useAuth(); // Accede al estado de autenticación
 
   //http://10.0.2.2/api/12_11login.php emulador
   //http://192.168.1.8/api/12_11login.php
   const baseURL = "http://10.0.2.2/10_10_inmobiliaria/inmobiliaria/assets/";
+
+
+    const styles = isDarkMode ? darkStyles : lightStyles;
 
   return (
     <View style={styles.header}>
@@ -65,7 +70,7 @@ const Header = ({ navigation, isModalVisible, setIsModalVisible, precioDolar, fe
   );
 };
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
     header: {
       flex: 1,
       width: '100%',
@@ -106,5 +111,48 @@ const styles = StyleSheet.create({
         borderColor: '#151515',      // Opcional: color del borde
       },
 });
+
+const darkStyles = StyleSheet.create({
+  header: {
+    flex: 1,
+    width: '100%',
+    padding: 2,
+    backgroundColor: '#101010',
+    alignItems: 'left',
+    position: 'absolute',
+    top: 0,
+  },
+  headerContent: {
+    flexDirection: 'row', 
+    alignItems: 'center',
+  },  
+  headerText: {
+    fontSize: 25,
+    color: '#F5F5F5',
+    fontWeight: 'bold',
+    marginRight: 5,
+  },
+  headerText2: {
+    fontSize: 15,
+    color: '#F5F5F5',
+    fontWeight: 'bold',
+    marginLeft: 20,
+  },
+  preciovalor: {
+    color: '#A91D3A',
+  },
+  logo: {
+    width: 80, 
+    height: 80, 
+  },
+  avatar: {
+      width: 50,               // Ajusta el tamaño del avatar según lo necesario
+      height: 50,              // Debe ser el mismo valor que el ancho para formar un círculo
+      borderRadius: 50,         // La mitad del ancho/alto para hacer un círculo
+      borderWidth: 2,           // Opcional: ancho del borde
+      borderColor: '#151515',      // Opcional: color del borde
+    },
+});
+
 
 export default Header;
