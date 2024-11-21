@@ -32,7 +32,7 @@ const Modalupdate = ({ isModalVisible, setIsModalVisible, userData }) => {
       }
       //10.0.2.2
       //192.168.1.8 celular
-      const response = await fetch('http://10.0.2.2 /api/updatepers.php', {
+      const response = await fetch('http://10.10.9.39/api/updatepers.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

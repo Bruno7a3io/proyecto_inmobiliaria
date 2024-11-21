@@ -27,7 +27,7 @@ const PropertyCard = ({ price, category, date, address, imageComponent, onConsul
      // Dirección base
      //10.0.2.2  emulador
       //192.168.1.8 celular
-     const baseURL = "http://10.0.2.2/10_10_inmobiliaria/inmobiliaria/assets/";
+     const baseURL = "http://10.10.9.39/10_10_inmobiliaria/inmobiliaria/assets/";
     
 
     
@@ -62,7 +62,7 @@ const PropertyCard = ({ price, category, date, address, imageComponent, onConsul
             <Icon name="close" size={30} color="#FFF" />
           </TouchableOpacity>
           <TouchableOpacity onPress={toggleModal}>
-          <Image source={{ uri: `${imageComponent}` }} style={styles.image} />
+          <Image source={{ uri:  `${baseURL}${imageComponent}`}} style={styles.image} />
           </TouchableOpacity>
         </View>
       </Modal>
@@ -94,7 +94,7 @@ const lightStyles = StyleSheet.create({
   },
   modalContent: {
     width: Dimensions.get('window').width - 30,
-    height: 230,
+    height: 400,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.8)', // Fondo semitransparente

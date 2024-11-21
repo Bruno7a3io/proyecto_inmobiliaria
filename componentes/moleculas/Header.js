@@ -16,7 +16,7 @@ const Header = ({ navigation, isModalVisible, setIsModalVisible, precioDolar, fe
 
   //http://10.0.2.2/api/12_11login.php emulador
   //http://192.168.1.8/api/12_11login.php
-  const baseURL = "http://10.0.2.2/10_10_inmobiliaria/inmobiliaria/assets/";
+  const baseURL = "http://192.168.1.8/10_10_inmobiliaria/inmobiliaria/assets/";
 
 
     const styles = isDarkMode ? darkStyles : lightStyles;

@@ -47,7 +47,7 @@ const PropertyDetail = ({ route, navigation }) => {
  
    const getpropiedad = async () => {
      try {
-       const response = await fetch('http://192.168.1.8/api/propiedad.php');
+       const response = await fetch('http://10.10.9.39/api/propiedad.php');
        const json = await response.json();
        setpropiedad(json); // Asumiendo que json es un array de personas
      } catch (error) {
@@ -130,7 +130,7 @@ const PropertyDetail = ({ route, navigation }) => {
      // Dirección base
      //10.0.2.2  emulador
       //192.168.1.8 celular
-      const baseURL = "http://10.0.2.2/10_10_inmobiliaria/inmobiliaria/assets/";
+      const baseURL = "http://10.10.9.39/10_10_inmobiliaria/inmobiliaria/assets/";
 
       const handlevolver = () => {
         navigation.navigate('Home'); 
