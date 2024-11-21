@@ -64,11 +64,12 @@ const MyScrollableComponent = ( {navigation} ) => {
   };
   //10.0.2.2 emulador
   //192.168.1.8 celuar
+  // 192.168.56.1
   const getPropiedades = async () => {
     try {
       const url = categoria 
-      ? `http://192.168.1.8/api/propiedad.php?categoria=${categoria}&finalidad=${finalidadSeleccionada}`
-      : `http://192.168.1.8/api/propiedad.php`;
+      ? `http://10.10.9.39/api/propiedad.php?categoria=${categoria}&finalidad=${finalidadSeleccionada}`
+      : `http://10.10.9.39/api/propiedad.php`;
     
       const response = await fetch(url);
       const json = await response.json();
@@ -165,7 +166,7 @@ return (
           {isLoading ? (
             <ActivityIndicator />
           ) : propiedad.length === 0 ? (
-            <Text style={{ textAlign: 'center', marginTop: 20, fontSize: 18 }}>No hay propiedades disponibles</Text> // Muestra este mensaje si no hay propiedades
+            <Text style={{ textAlign: 'center', marginTop: 20, fontSize: 18, color: isDarkMode ? '#F5F5F5' : '#000' }}>No hay propiedades disponibles</Text> // Muestra este mensaje si no hay propiedades
           ) : (
             propiedad.map((item) => (
             <PropertyCard
